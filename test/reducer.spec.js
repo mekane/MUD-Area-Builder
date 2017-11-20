@@ -1,16 +1,18 @@
 const expect = require('chai').expect;
 const deepFreeze = require('deep-freeze');
-const getNextState = require('../src/reducers/appState.js');
 
 const actions = require('../src/actions.js');
+const getNextState = require('../src/reducers/appState.js');
+
+const defaultState = {
+    areaInfo: {},
+    rooms: {
+        byId: {},
+        lastId: 0
+    }
+};
 
 describe('The Test App root reducer', () => {
-    const defaultState = {
-        areaInfo: {},
-        roomsById: {},
-        lastRoomId: 0
-    };
-
     it('should be a function', () => {
         expect(getNextState).to.be.a('function');
     });
@@ -24,13 +26,15 @@ describe('The Test App root reducer', () => {
 
     it('should return the identical original state if called with no action', () => {
         const originalState = {
-            areaInfo: {}
+            returnThisInstance: true
         };
         const actualState = getNextState(originalState);
 
         expect(actualState).to.equal(originalState);
     });
+});
 
+describe('Room State', () => {
     describe('adding rooms', () => {
         it('should return the identical original state if called with a bogus action type', () => {
             const originalState = {};
@@ -41,19 +45,21 @@ describe('The Test App root reducer', () => {
         });
 
         it('should add a totally default room if the room info is missing', () => {
-            const bogusAddRoomAction = {
+            const emptyAddRoomAction = {
                 type: 'ADD_ROOM'
             };
 
             const expectedState = {
                 areaInfo: {},
-                roomsById: {
-                    1: {id: 1, name: ''}
-                },
-                lastRoomId: 1
+                rooms: {
+                    byId: {
+                        1: {id: 1, name: ''}
+                    },
+                    lastId: 1
+                }
             };
 
-            const actualState = getNextState(defaultState, bogusAddRoomAction);
+            const actualState = getNextState(defaultState, emptyAddRoomAction);
 
             expect(actualState).to.deep.equal(expectedState);
         });
@@ -61,10 +67,12 @@ describe('The Test App root reducer', () => {
         it('should add rooms to the list by ID if called with the ADD_ROOM action type', () => {
             const expectedState = {
                 areaInfo: {},
-                roomsById: {
-                    1: {id: 1, name: 'test'}
-                },
-                lastRoomId: 1
+                rooms: {
+                    byId: {
+                        1: {id: 1, name: 'test'}
+                    },
+                    lastId: 1
+                }
             };
 
             const addRoomAction = actions.addRoom({
@@ -79,12 +87,14 @@ describe('The Test App root reducer', () => {
         it('should continue to add more rooms to the list with subsequent actions', () => {
             const expectedState = {
                 areaInfo: {},
-                roomsById: {
-                    1: {id: 1, name: 'test'},
-                    2: {id: 2, name: 'test'},
-                    3: {id: 3, name: 'test'}
-                },
-                lastRoomId: 3
+                rooms: {
+                    byId: {
+                        1: {id: 1, name: 'test'},
+                        2: {id: 2, name: 'test'},
+                        3: {id: 3, name: 'test'}
+                    },
+                    lastId: 3
+                }
             };
 
             const addRoomAction = actions.addRoom({
@@ -115,17 +125,19 @@ describe('The Test App root reducer', () => {
 
     describe('tracking room IDs', () => {
         it('should keep track of the last ID that was used', () => {
-            expect(defaultState.lastRoomId).to.equal(0);
+            expect(defaultState.rooms.lastId).to.equal(0);
         });
 
         it('should increment the IDs of subsequent rooms that are added', () => {
             const expectedState = {
                 areaInfo: {},
-                roomsById: {
-                    1: {id: 1, name: 'test'},
-                    2: {id: 2, name: 'test'}
-                },
-                lastRoomId: 2
+                rooms: {
+                    byId: {
+                        1: {id: 1, name: 'test'},
+                        2: {id: 2, name: 'test'}
+                    },
+                    lastId: 2
+                }
             };
 
             const addRoomAction = actions.addRoom({
@@ -140,16 +152,20 @@ describe('The Test App root reducer', () => {
 
         it('should be able to continue from a known last ID, regardless of what rooms are in the list', () => {
             const originalState = Object.assign(defaultState, {
-                lastRoomId: 3
+                rooms: {
+                    lastId: 3
+                }
             });
 
             const expectedState = {
                 areaInfo: {},
-                roomsById: {
-                    4: {id: 4, name: 'test'},
-                    5: {id: 5, name: 'test'}
-                },
-                lastRoomId: 5
+                rooms: {
+                    byId: {
+                        4: {id: 4, name: 'test'},
+                        5: {id: 5, name: 'test'}
+                    },
+                    lastId: 5
+                }
             };
 
             const addRoomAction = actions.addRoom({
