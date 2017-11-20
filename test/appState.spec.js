@@ -34,148 +34,75 @@ describe('The Test App root reducer', () => {
     });
 });
 
-describe('Room State', () => {
-    describe('adding rooms', () => {
-        it('should return the identical original state if called with a bogus action type', () => {
-            const originalState = {};
-            const expectedState = originalState;
-            const actualState = getNextState(originalState, {type: 'BOGUS'});
+/* These are duplicates of tests that are in the rooms state test, but are here for integration into the main state */
+describe('integrating room state', () => {
+    it('should add rooms to the list by ID if called with the ADD_ROOM action type', () => {
+        const expectedState = {
+            areaInfo: {},
+            rooms: {
+                byId: {
+                    1: {id: 1, name: 'test'}
+                },
+                lastId: 1
+            }
+        };
 
-            expect(actualState).to.equal(expectedState);
+        const addRoomAction = actions.addRoom({
+            name: 'test'
         });
 
-        it('should add a totally default room if the room info is missing', () => {
-            const emptyAddRoomAction = {
-                type: 'ADD_ROOM'
-            };
+        const actualState = getNextState(defaultState, addRoomAction);
 
-            const expectedState = {
-                areaInfo: {},
-                rooms: {
-                    byId: {
-                        1: {id: 1, name: ''}
-                    },
-                    lastId: 1
-                }
-            };
-
-            const actualState = getNextState(defaultState, emptyAddRoomAction);
-
-            expect(actualState).to.deep.equal(expectedState);
-        });
-
-        it('should add rooms to the list by ID if called with the ADD_ROOM action type', () => {
-            const expectedState = {
-                areaInfo: {},
-                rooms: {
-                    byId: {
-                        1: {id: 1, name: 'test'}
-                    },
-                    lastId: 1
-                }
-            };
-
-            const addRoomAction = actions.addRoom({
-                name: 'test'
-            });
-
-            const actualState = getNextState(defaultState, addRoomAction);
-
-            expect(actualState).to.deep.equal(expectedState);
-        });
-
-        it('should continue to add more rooms to the list with subsequent actions', () => {
-            const expectedState = {
-                areaInfo: {},
-                rooms: {
-                    byId: {
-                        1: {id: 1, name: 'test'},
-                        2: {id: 2, name: 'test'},
-                        3: {id: 3, name: 'test'}
-                    },
-                    lastId: 3
-                }
-            };
-
-            const addRoomAction = actions.addRoom({
-                name: 'test'
-            });
-
-            const firstState = getNextState(defaultState, addRoomAction);
-            const secondState = getNextState(firstState, addRoomAction);
-            const actualState = getNextState(secondState, addRoomAction);
-
-            expect(actualState).to.deep.equal(expectedState);
-        });
-
-        it('should never modify the previous state, only return new ones', () => {
-            const originalState = {
-                roomsById: ['do not modify']
-            };
-
-            const addRoomAction = actions.addRoom({
-                name: 'test'
-            });
-
-            deepFreeze(originalState); //will throw an exception if anyone tries to mutate originalState
-
-            getNextState(originalState, addRoomAction);
-        });
+        expect(actualState).to.deep.equal(expectedState);
     });
 
-    describe('tracking room IDs', () => {
-        it('should keep track of the last ID that was used', () => {
-            expect(defaultState.rooms.lastId).to.equal(0);
+    it('should continue to add more rooms to the list with subsequent actions', () => {
+        const expectedState = {
+            areaInfo: {},
+            rooms: {
+                byId: {
+                    1: {id: 1, name: 'test'},
+                    2: {id: 2, name: 'test'},
+                    3: {id: 3, name: 'test'}
+                },
+                lastId: 3
+            }
+        };
+
+        const addRoomAction = actions.addRoom({
+            name: 'test'
         });
 
-        it('should increment the IDs of subsequent rooms that are added', () => {
-            const expectedState = {
-                areaInfo: {},
-                rooms: {
-                    byId: {
-                        1: {id: 1, name: 'test'},
-                        2: {id: 2, name: 'test'}
-                    },
-                    lastId: 2
-                }
-            };
+        const firstState = getNextState(defaultState, addRoomAction);
+        const secondState = getNextState(firstState, addRoomAction);
+        const actualState = getNextState(secondState, addRoomAction);
 
-            const addRoomAction = actions.addRoom({
-                name: 'test'
-            });
+        expect(actualState).to.deep.equal(expectedState);
+    });
 
-            const nextState = getNextState(defaultState, addRoomAction);
-            const actualState = getNextState(nextState, addRoomAction);
+    it('should keep track of the last ID that was used', () => {
+        expect(defaultState.rooms.lastId).to.equal(0);
+    });
 
-            expect(actualState).to.deep.equal(expectedState);
+    it('should increment the IDs of subsequent rooms that are added', () => {
+        const expectedState = {
+            areaInfo: {},
+            rooms: {
+                byId: {
+                    1: {id: 1, name: 'test'},
+                    2: {id: 2, name: 'test'}
+                },
+                lastId: 2
+            }
+        };
+
+        const addRoomAction = actions.addRoom({
+            name: 'test'
         });
 
-        it('should be able to continue from a known last ID, regardless of what rooms are in the list', () => {
-            const originalState = Object.assign(defaultState, {
-                rooms: {
-                    lastId: 3
-                }
-            });
+        const nextState = getNextState(defaultState, addRoomAction);
+        const actualState = getNextState(nextState, addRoomAction);
 
-            const expectedState = {
-                areaInfo: {},
-                rooms: {
-                    byId: {
-                        4: {id: 4, name: 'test'},
-                        5: {id: 5, name: 'test'}
-                    },
-                    lastId: 5
-                }
-            };
-
-            const addRoomAction = actions.addRoom({
-                name: 'test'
-            });
-
-            const nextState = getNextState(originalState, addRoomAction);
-            const actualState = getNextState(nextState, addRoomAction);
-
-            expect(actualState).to.deep.equal(expectedState);
-        });
+        expect(actualState).to.deep.equal(expectedState);
     });
 });
