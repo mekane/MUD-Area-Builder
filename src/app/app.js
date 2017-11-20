@@ -3,7 +3,7 @@ const ReactDOM = require('react-dom');
 const Redux = require('redux');
 
 const actions = require('../actions.js');
-const reducer = require('../reducer.js');
+const reducer = require('../reducers/rooms.js');
 
 const App = require('../components/App');
 

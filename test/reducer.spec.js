@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const deepFreeze = require('deep-freeze');
-const getNextState = require('../src/reducer.js');
+const getNextState = require('../src/reducers/appState.js');
 
 const actions = require('../src/actions.js');
 

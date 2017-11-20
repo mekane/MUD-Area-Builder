@@ -1,19 +1,16 @@
-'use strict';
 const defaultState = () => {
     return {
-        areaInfo: {},
-        roomsById: {},
-        lastRoomId: 0
+        byId: {},
+        lastId: 0
     };
 };
 
-const testApp = (currentState = defaultState(), action = {type: null}) => {
-
+const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
     switch (action.type) {
         case 'ADD_ROOM':
             const newId = nextRoomId();
-            return Object.assign({}, defaultState, currentState, {
-                roomsById: Object.assign({}, currentState.roomsById, {
+            return Object.assign({}, defaultState, state, {
+                roomsById: Object.assign({}, state.roomsById, {
                     [newId]: {
                         id: newId,
                         name: action.roomInfo ? action.roomInfo['name'] : ''
@@ -22,12 +19,12 @@ const testApp = (currentState = defaultState(), action = {type: null}) => {
                 lastRoomId: newId
             });
         default:
-            return currentState;
+            return state;
     }
 
     function nextRoomId() {
-        return (currentState.lastRoomId || 0) + 1;
+        return (state.lastRoomId || 0) + 1;
     }
 };
 
-module.exports = testApp;
+module.exports = roomsStateReducer;
