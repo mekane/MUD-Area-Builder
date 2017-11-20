@@ -32,24 +32,30 @@ describe('The Test App root reducer', () => {
     });
 
     describe('adding rooms', () => {
-        it('should return the identical original state if called with a bogus action', () => {
+        it('should return the identical original state if called with a bogus action type', () => {
             const originalState = {};
             const expectedState = originalState;
-            const actualState = getNextState(originalState, {bogus: true});
+            const actualState = getNextState(originalState, {type: 'BOGUS'});
 
             expect(actualState).to.equal(expectedState);
         });
 
-        it('should ignore the action if the room info is missing', () => {
+        it('should add a totally default room if the room info is missing', () => {
             const bogusAddRoomAction = {
                 type: 'ADD_ROOM'
             };
 
-            const originalState = defaultState;
+            const expectedState = {
+                areaInfo: {},
+                roomsById: {
+                    1: {id: 1, name: ''}
+                },
+                lastRoomId: 1
+            };
 
-            const actualState = getNextState(originalState, bogusAddRoomAction);
+            const actualState = getNextState(defaultState, bogusAddRoomAction);
 
-            expect(actualState).to.equal(originalState);
+            expect(actualState).to.deep.equal(expectedState);
         });
 
         it('should add rooms to the list by ID if called with the ADD_ROOM action type', () => {
@@ -65,7 +71,7 @@ describe('The Test App root reducer', () => {
                 name: 'test'
             });
 
-            const actualState = getNextState({}, addRoomAction);
+            const actualState = getNextState(defaultState, addRoomAction);
 
             expect(actualState).to.deep.equal(expectedState);
         });
@@ -133,10 +139,9 @@ describe('The Test App root reducer', () => {
         });
 
         it('should be able to continue from a known last ID, regardless of what rooms are in the list', () => {
-            const originalState = {
-                roomsById: {},
+            const originalState = Object.assign(defaultState, {
                 lastRoomId: 3
-            };
+            });
 
             const expectedState = {
                 areaInfo: {},
