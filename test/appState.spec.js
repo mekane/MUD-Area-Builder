@@ -34,6 +34,42 @@ describe('The Test App root reducer', () => {
     });
 });
 
+describe('integrating area info', () => {
+    it('sets area info properties from the action information', () => {
+        const originalState = defaultState;
+        const expectedState = {
+            areaInfo: {
+                name: 'Test Area',
+                fileName: 'test.are',
+                minLevel: 6,
+                maxLevel: 36,
+                authorName: 'Marty',
+                minVnum: 1000,
+                maxVnum: 1099
+            },
+            rooms: {
+                byId: {},
+                lastId: 0
+            }
+        };
+
+        const setAreaInfoAction = actions.setAreaInfo({
+            name: 'Test Area',
+            fileName: 'test.are',
+            minLevel: 6,
+            maxLevel: 36,
+            authorName: 'Marty',
+            minVnum: 1000,
+            maxVnum: 1099
+        });
+
+        const actualState = getNextState(originalState, setAreaInfoAction);
+
+        expect(actualState).to.deep.equal(expectedState);
+    });
+});
+
+
 /* These are duplicates of tests that are in the rooms state test, but are here for integration into the main state */
 describe('integrating room state', () => {
     it('should add rooms to the list by ID if called with the ADD_ROOM action type', () => {
