@@ -8,6 +8,7 @@ const defaultState = () => {
 const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
     switch (action.type) {
         case 'ADD_ROOM':
+        case 'SET_ROOM':
             const newId = nextRoomId();
             return {
                 byId: Object.assign({}, state.byId, {

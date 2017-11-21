@@ -142,3 +142,7 @@ describe('integrating room state', () => {
         expect(actualState).to.deep.equal(expectedState);
     });
 });
+
+
+
+//TODO: one big integration test with multiple actions, checking the state between each. Deep-Freeze liberally

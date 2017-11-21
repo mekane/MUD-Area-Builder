@@ -14,7 +14,7 @@ function addRoom(newRoomInfo) {
 
 function setRoomInfo(updatedRoomInfo) {
     return {
-        type: 'SET_ROOM_INFO',
+        type: 'SET_ROOM',
         roomInfo: updatedRoomInfo
     }
 }
