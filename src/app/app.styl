@@ -1,2 +1,45 @@
+/* === Resets === */
+*
+  border 0
+  box-sizing border-box
+  margin 0
+  padding 0
+
+  &:before, &:after
+    box-sizing inherit
+
+button
+input
+optgroup
+select
+textarea
+  font-size 1rem
+
+button
+  appearance none
+  background-color transparent
+  border 0
+  cursor pointer
+
+iframe
+  max-width 100%
+
+img
+  max-width 100%
+  vertical-align bottom
+
+/* === Forms and Inputs === */
+
+$form-input
+  border 2px solid #ccc
+  border-radius 4px
+  font-size 14px
+  padding 4px
+
+$button
+  border 2px solid #ccc
+  border-radius 4px
+  padding 4px
+
 @require '../components/App.styl'
 @require '../components/forms/AreaInfoForm.styl'
