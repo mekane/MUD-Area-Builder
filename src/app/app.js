@@ -21,6 +21,8 @@ function render() {
 
 store.subscribe(render);
 
+/*TEST*/store.dispatch(actions.addRoom({name: "Test Room"}));
+
 render();
 
 //these will be available in the browser via a global variable called 'app'. See the browserify config in Gruntfile.js
