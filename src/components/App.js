@@ -1,12 +1,19 @@
 const React = require('react'); //because the JSX transpiles to React.createElement(...) we need this here implicitly
 const AreaInfoForm = require('./forms/AreaInfoForm.js');
 const RoomList = require('./rooms/RoomList.js');
+const RoomMap = require('./rooms/RoomMap.js');
 
 const App = ({state}) => (
     <div className="app">
-        <AreaInfoForm areaInfo={state.areaInfo}></AreaInfoForm>
-        <div className="app-editor">
+        <div className="app__sidebar">
+            <h2>Area Info</h2>
+            <AreaInfoForm areaInfo={state.areaInfo}></AreaInfoForm>
+            <h2>Rooms</h2>
             <RoomList areaInfo={state.areaInfo} roomsData={state.rooms}></RoomList>
+        </div>
+        <div className="app__editor">
+            <h2>Map</h2>
+            <RoomMap areaInfo={state.areaInfo} roomsData={state.rooms}></RoomMap>
         </div>
     </div>
 );
