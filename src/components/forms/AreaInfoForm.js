@@ -53,13 +53,13 @@ const AreaInfoForm = ({areaInfo}) => {
             </label>
 
             <label className="area-info-form__label">
-                Minimum Level:
-                <input className="area-info-form__min-level" type="number" ref={(input) => minVnumInput = input} defaultValue={areaInfo.minVnum} />
+                Starting VNum:
+                <input className="area-info-form__min-vnum" type="number" ref={(input) => minVnumInput = input} defaultValue={areaInfo.minVnum} />
             </label>
 
             <label className="area-info-form__label">
-                Maximum Level:
-                <input className="area-info-form__max-level" type="number" ref={(input) => maxVnumInput = input} defaultValue={areaInfo.maxVnum} />
+                Ending VNum:
+                <input className="area-info-form__max-vnum" type="number" ref={(input) => maxVnumInput = input} defaultValue={areaInfo.maxVnum} />
             </label>
 
             <button type="button" className="area-info-form__update" onClick={updateInfo}>Update</button>

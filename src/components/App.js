@@ -6,7 +6,7 @@ const App = ({state}) => (
     <div className="app">
         <AreaInfoForm areaInfo={state.areaInfo}></AreaInfoForm>
         <div className="app-editor">
-            <RoomList roomsData={state.rooms}></RoomList>
+            <RoomList areaInfo={state.areaInfo} roomsData={state.rooms}></RoomList>
         </div>
     </div>
 );
