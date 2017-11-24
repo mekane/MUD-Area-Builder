@@ -30,7 +30,12 @@ describe('Room State - the reducer that handles the "rooms" property of the main
 
             const expectedState = {
                 byId: {
-                    1: {id: 1, name: ''}
+                    1: {
+                        id: 1,
+                        name: '',
+                        description: '',
+                        exit: {}
+                    }
                 },
                 lastId: 1
             };
@@ -43,7 +48,7 @@ describe('Room State - the reducer that handles the "rooms" property of the main
         it('should add rooms to the list by ID if called with the ADD_ROOM action type', () => {
             const expectedState = {
                 byId: {
-                    1: {id: 1, name: 'test'}
+                    1: {id: 1, name: 'test', description: '', exit: {}}
                 },
                 lastId: 1
             };
@@ -60,9 +65,9 @@ describe('Room State - the reducer that handles the "rooms" property of the main
         it('should continue to add more rooms to the list with subsequent actions', () => {
             const expectedState = {
                 byId: {
-                    1: {id: 1, name: 'test'},
-                    2: {id: 2, name: 'test'},
-                    3: {id: 3, name: 'test'}
+                    1: {id: 1, name: 'test', description: '', exit: {}},
+                    2: {id: 2, name: 'test', description: '', exit: {}},
+                    3: {id: 3, name: 'test', description: '', exit: {}}
                 },
                 lastId: 3
             };
@@ -91,6 +96,91 @@ describe('Room State - the reducer that handles the "rooms" property of the main
 
             getNextState(originalState, addRoomAction);
         });
+
+        it('should add known room properties when provided', () => {
+            const expectedRoom = {
+                id: 1,
+                name: 'test name',
+                description: 'test desc',
+                exit: {
+                    n: {
+                        destination: 2
+                    },
+                    e: {
+                        destination: 3
+                    }
+                }
+            };
+
+            const addRoomAction = actions.addRoom({
+                name: 'test name',
+                description: 'test desc',
+                exit: {
+                    n: {
+                        destination: 2
+                    },
+                    e: {
+                        destination: 3
+
+                    }
+                }
+            });
+
+            const actualState = getNextState(defaultState, addRoomAction);
+            const actualRoom = actualState.byId[1];
+
+            expect(actualRoom).to.deep.equal(expectedRoom);
+        });
+    });
+
+    describe('updating rooms', () => {
+        it('should update existing rooms based on the id passed in the roomInfo', () => {
+            const originalState = {
+                byId: {
+                    1: {id: 1, name: 'test', description: '', exit: {}}
+                },
+                lastId: 1
+            };
+
+            const expectedState = {
+                byId: {
+                    1: {id: 1, name: 'new name', description: 'new description', exit: {}}
+                },
+                lastId: 1
+            };
+
+            const updateRoomAction = actions.setRoomInfo({
+                id: 1,
+                name: 'new name',
+                description: 'new description'
+            });
+
+            const actualState = getNextState(originalState, updateRoomAction);
+
+            expect(actualState).to.deep.equal(expectedState);
+        });
+
+        it('makes a new room, not touching the old one', () => {
+            const originalState = {
+                byId: {
+                    1: {id: 1, name: 'test', description: '', exit: {}}
+                },
+                lastId: 1
+            };
+
+            const updateRoomAction = actions.setRoomInfo({
+                id: 1,
+                name: 'new name',
+                description: 'new description'
+            });
+
+            deepFreeze(originalState);
+
+            const nextState = getNextState(originalState, updateRoomAction);
+            const updatedRoom = nextState.byId['1'];
+
+            expect(updatedRoom).to.not.equal(originalState.byId['1']);
+        });
     });
 
     describe('tracking room IDs', () => {
@@ -101,8 +191,8 @@ describe('Room State - the reducer that handles the "rooms" property of the main
         it('should increment the IDs of subsequent rooms that are added', () => {
             const expectedState = {
                 byId: {
-                    1: {id: 1, name: 'test'},
-                    2: {id: 2, name: 'test'}
+                    1: {id: 1, name: 'test', description: '', exit: {}},
+                    2: {id: 2, name: 'test', description: '', exit: {}}
                 },
                 lastId: 2
             };
@@ -124,8 +214,8 @@ describe('Room State - the reducer that handles the "rooms" property of the main
 
             const expectedState = {
                 byId: {
-                    4: {id: 4, name: 'test'},
-                    5: {id: 5, name: 'test'}
+                    4: {id: 4, name: 'test', description: '', exit: {}},
+                    5: {id: 5, name: 'test', description: '', exit: {}}
                 },
                 lastId: 5
             };

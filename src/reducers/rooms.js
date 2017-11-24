@@ -5,19 +5,32 @@ const defaultState = () => {
     };
 };
 
+const defaultRoom = {
+    name: '',
+    description: '',
+    exit: {}
+};
+
 const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
     switch (action.type) {
         case 'ADD_ROOM':
-        case 'SET_ROOM':
             const newId = nextRoomId();
+            const newRoom = Object.assign({}, defaultRoom, {id: newId}, action.roomInfo);
             return {
                 byId: Object.assign({}, state.byId, {
-                    [newId]: {
-                        id: newId,
-                        name: action.roomInfo ? action.roomInfo['name'] : ''
-                    }
+                    [newId]: newRoom
                 }),
                 lastId: newId
+            };
+            break;
+        case 'SET_ROOM':
+            const existingRoom = state.byId[action.roomInfo.id] || {};
+            const updatedRoom = Object.assign({}, defaultRoom, existingRoom, action.roomInfo);
+            return {
+                byId: Object.assign({}, state.byId, {
+                    [action.roomInfo.id]: updatedRoom
+                }),
+                lastId: state.lastId
             };
             break;
         default:

@@ -77,7 +77,12 @@ describe('integrating room state', () => {
             areaInfo: {},
             rooms: {
                 byId: {
-                    1: {id: 1, name: 'test'}
+                    1: {
+                        id: 1,
+                        name: 'test',
+                        description: '',
+                        exit: {}
+                    }
                 },
                 lastId: 1
             }
@@ -97,9 +102,9 @@ describe('integrating room state', () => {
             areaInfo: {},
             rooms: {
                 byId: {
-                    1: {id: 1, name: 'test'},
-                    2: {id: 2, name: 'test'},
-                    3: {id: 3, name: 'test'}
+                    1: {id: 1, name: 'test', description: '', exit: {}},
+                    2: {id: 2, name: 'test', description: '', exit: {}},
+                    3: {id: 3, name: 'test', description: '', exit: {}}
                 },
                 lastId: 3
             }
@@ -125,8 +130,8 @@ describe('integrating room state', () => {
             areaInfo: {},
             rooms: {
                 byId: {
-                    1: {id: 1, name: 'test'},
-                    2: {id: 2, name: 'test'}
+                    1: {id: 1, name: 'test', description: '', exit: {}},
+                    2: {id: 2, name: 'test', description: '', exit: {}}
                 },
                 lastId: 2
             }
@@ -142,7 +147,6 @@ describe('integrating room state', () => {
         expect(actualState).to.deep.equal(expectedState);
     });
 });
-
 
 
 //TODO: one big integration test with multiple actions, checking the state between each. Deep-Freeze liberally
