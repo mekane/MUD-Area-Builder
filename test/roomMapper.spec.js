@@ -150,5 +150,120 @@ describe('Room Mapping Logic', () => {
             expect(roomsWithCoordinates['0'].coordinates).to.deep.equal({x: 0, y: 0});
             expect(roomsWithCoordinates['1'].coordinates).to.deep.equal({x: -1, y: 0});
         });
+
+        it('does not get stuck in an infinite loop when rooms have circular references', () => {
+            const twoRooms = {
+                '0': {
+                    id: 0,
+                    name: 'First Room',
+                    exit: {
+                        e: {
+                            destination: 1
+                        }
+                    }
+                },
+                '1': {
+                    id: 1,
+                    name: 'Second Room',
+                    exit: {
+                        w: {
+                            destination: 0
+                        }
+                    }
+                }
+            };
+            const roomsWithCoordinates = mapper.generateCoordinates(twoRooms);
+
+            expect(roomsWithCoordinates['0'].coordinates).to.deep.equal({x: 0, y: 0});
+            expect(roomsWithCoordinates['1'].coordinates).to.deep.equal({x: 1, y: 0});
+        });
+
+        it('follows exits until it adds coordinates to all the rooms', () => {
+            /* 5-4
+             *   |
+             *   0-1-2
+             *       |
+             *       3
+             */
+            const moreRooms = {
+                '0': {
+                    id: 0,
+                    name: 'First Room',
+                    exit: {
+                        n: {
+                            destination: 4
+                        },
+                        e: {
+                            destination: 1
+                        }
+                    }
+                },
+                '1': {
+                    id: 1,
+                    name: 'Second Room',
+                    exit: {
+                        e: {
+                            destination: 2
+                        },
+                        w: {
+                            destination: 0
+                        }
+                    }
+                },
+                '2': {
+                    id: 2,
+                    name: 'Third Room',
+                    exit: {
+                        s: {
+                            destination: 3
+                        },
+                        w: {
+                            destination: 1
+                        }
+
+                    }
+                },
+                '3': {
+                    id: 3,
+                    name: 'Fourth Room',
+                    exit: {
+                        n: {
+                            destination: 2
+                        }
+                    }
+                },
+                '4': {
+                    id: 4,
+                    name: 'Fifth Room',
+                    exit: {
+                        s: {
+                            destination: 0
+                        },
+                        w: {
+                            destination: 5
+                        }
+                    }
+                },
+                '5': {
+                    id: 5,
+                    name: 'Sixth Room',
+                    exit: {
+                        e: {
+                            destination: 4
+                        }
+                    }
+                }
+
+            };
+            const roomsWithCoordinates = mapper.generateCoordinates(moreRooms);
+
+            expect(roomsWithCoordinates['0'].coordinates).to.deep.equal({x: 0, y: 0});
+            expect(roomsWithCoordinates['1'].coordinates).to.deep.equal({x: 1, y: 0});
+            expect(roomsWithCoordinates['2'].coordinates).to.deep.equal({x: 2, y: 0});
+            expect(roomsWithCoordinates['3'].coordinates).to.deep.equal({x: 2, y: 1});
+            expect(roomsWithCoordinates['4'].coordinates).to.deep.equal({x: 0, y: -1});
+            expect(roomsWithCoordinates['5'].coordinates).to.deep.equal({x: -1, y: -1});
+        });
+
     });
 });

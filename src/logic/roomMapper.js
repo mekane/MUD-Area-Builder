@@ -3,7 +3,9 @@ const generateCoordinates = (mapOfRoomsById) => {
         if (typeof(room) !== 'object' || visited[room.id]) {
             return;
         }
-        //visited[room.id] = true;
+
+        visited[room.id] = true;
+
         room['coordinates'] = currentCoordinates;
 
         if (room.exit && room.exit.n) {
