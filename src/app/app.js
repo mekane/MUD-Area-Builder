@@ -21,7 +21,10 @@ function render() {
 
 store.subscribe(render);
 
-/*TEST*/store.dispatch(actions.addRoom({name: "Test Room"}));
+/* === LOAD TEST DATA === */
+const testDataActions = require('../../exampleData/fourRoomsInASquare.json');
+testDataActions.forEach(addRoom => store.dispatch(addRoom));
+/* ---------------------- */
 
 render();
 

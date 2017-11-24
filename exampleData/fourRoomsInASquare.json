@@ -1,0 +1,76 @@
+[
+  {
+    "type": "SET_AREA_INFO",
+    "areaInfo": {
+      "name": "Four Rooms In A Square",
+      "minLevel": "1",
+      "maxLevel": "4",
+      "minVnum": "4000",
+      "maxVnum": "4099"
+    }
+  },
+  {
+    "type": "ADD_ROOM",
+    "roomInfo": {
+      "id": "1",
+      "name": "Room One",
+      "description": "The first room",
+      "exit": {
+        "e": {
+          "destination": "2"
+        },
+        "s": {
+          "destination": "4"
+        }
+      }
+    }
+  },
+  {
+    "type": "ADD_ROOM",
+    "roomInfo": {
+      "id": "2",
+      "name": "Room Two",
+      "description": "The second room",
+      "exit": {
+        "s": {
+          "destination": "3"
+        },
+        "w": {
+          "destination": "1"
+        }
+      }
+    }
+  },
+  {
+    "type": "ADD_ROOM",
+    "roomInfo": {
+      "id": "3",
+      "name": "Room Three",
+      "description": "The third room",
+      "exit": {
+        "n": {
+          "destination": "2"
+        },
+        "w": {
+          "destination": "4"
+        }
+      }
+    }
+  },
+  {
+    "type": "ADD_ROOM",
+    "roomInfo": {
+      "id": "4",
+      "name": "Room Four",
+      "description": "The fourth room",
+      "exit": {
+        "n": {
+          "destination": "1"
+        },
+        "e": {
+          "destination": "3"
+        }
+      }
+    }
+  }
+]
