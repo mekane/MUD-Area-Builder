@@ -43,6 +43,16 @@ describe('VNum Logic', () => {
 
         vnumGenerator = vnum.generator("55.77");
         expect(vnumGenerator(0)).to.equal(55);
+
+        vnumGenerator = vnum.generator(1000);
+        expect(vnumGenerator("3")).to.equal(1003);
+
+        vnumGenerator = vnum.generator(1000);
+        expect(vnumGenerator(3.33)).to.equal(1003);
+
+        vnumGenerator = vnum.generator(1000);
+        expect(vnumGenerator("3.55")).to.equal(1003);
+
     });
     
     it('generator should take an argument and return it added to the starting vnum', () => {

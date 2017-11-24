@@ -1,19 +1,21 @@
+const toInteger = (arg) => {
+    let intValue = 0;
+
+    if ( typeof arg === 'number' ) {
+        return Math.floor(arg);
+    }
+    else if ( typeof arg === 'string' ) {
+        intValue = parseInt(arg);
+    }
+
+    return isNaN(intValue) ? 0 : intValue;
+};
+
 const vnumGenerator = function( minVnum ) {
-    let startingVM = 0;
-
-    if ( typeof minVnum === 'number' ) {
-        startingVM = Math.floor(minVnum);
-    }
-    else if ( typeof minVnum === 'string' ) {
-        startingVM = parseInt(minVnum);
-    }
-
-    if ( isNaN(startingVM) ) {
-        startingVM = 0;
-    }
+    const startingVM = toInteger(minVnum);
 
     return function( id ) {
-        return startingVM + id;
+        return startingVM + toInteger(id);
     }
 };
 
