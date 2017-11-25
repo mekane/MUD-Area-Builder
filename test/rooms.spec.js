@@ -133,6 +133,44 @@ describe('Room State - the reducer that handles the "rooms" property of the main
         });
     });
 
+    describe('adding and connecting rooms', () => {
+        it('should return the identical original state if called with missing data', () => {
+            const badActionMissing1 = actions.addAndConnectRoom({}, 'n');
+            const badActionMissing2 = actions.addAndConnectRoom({});
+            const badActionMissing3 = actions.addAndConnectRoom();
+
+            const originalState = {};
+
+            expect(getNextState(originalState, badActionMissing1)).to.equal(originalState);
+            expect(getNextState(originalState, badActionMissing2)).to.equal(originalState);
+            expect(getNextState(originalState, badActionMissing3)).to.equal(originalState);
+        });
+
+        it('should add the new room and add an exit in the appropriate direction from the source room', () => {
+            const originalState = {
+                byId: {
+                    1: {id: 1, name: 'one room', description: '', exit: {}}
+                },
+                lastId: 1
+            };
+
+            const expectedState = {
+                byId: {
+                    1: {id: 1, name: 'one room', description: '', exit: {e: {destination: 2}}},
+                    2: {id: 2, name: 'New Room', description: '', exit: {w: {destination: 1}}}
+                },
+                lastId: 2
+            };
+
+            const addAndConnectRoomAction = actions.addAndConnectRoom(1, 'e', {name: 'New Room'});
+
+            const actualState = getNextState(originalState, addAndConnectRoomAction);
+
+            expect(actualState).to.deep.equal(expectedState);
+        });
+    });
+
+
     describe('updating rooms', () => {
         it('should update existing rooms based on the id passed in the roomInfo', () => {
             const originalState = {

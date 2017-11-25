@@ -12,6 +12,15 @@ function addRoom(newRoomInfo) {
     }
 }
 
+function addAndConnectRoom(sourceRoomId, direction, roomInfo) {
+    return {
+        type: 'ADD_AND_CONNECT_ROOM',
+        sourceRoomId,
+        direction,
+        roomInfo
+    }
+}
+
 function setRoomInfo(updatedRoomInfo) {
     return {
         type: 'SET_ROOM',
@@ -22,5 +31,6 @@ function setRoomInfo(updatedRoomInfo) {
 module.exports = {
     setAreaInfo,
     addRoom,
+    addAndConnectRoom,
     setRoomInfo
 };

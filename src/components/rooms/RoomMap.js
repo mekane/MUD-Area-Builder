@@ -1,4 +1,5 @@
 const React = require('react'); //because the JSX transpiles to React.createElement(...) we need this here implicitly
+const actions = require('../../actions.js');
 const vnumLogic = require('../../logic/vnums.js');
 const mapper = require('../../logic/roomMapper.js');
 
@@ -9,13 +10,20 @@ const exits = ['n', 'e', 's', 'w'];
 
 const cssValueForCoordinate = (val) => val * (roomSize + gapBetweenRooms);
 
+function addRoom(action) {
+    console.log('add and connect', action);
+    app.store.dispatch(action);
+}
+
 const Exit = (room, direction) => {
     const exit = room.exit[direction];
     if (exit && exit.destination) {
-        return <div className={`room-map__room-exit--${direction}`}></div>;
+        return <div key={direction} className={`room-map__room-exit--${direction}`}></div>;
     }
     else {
-        return <div className={`room-map__room-exit-add--${direction}`}></div>;
+        const connectRoom = () => addRoom(actions.addAndConnectRoom(room.id, direction, {}));
+
+        return <div key={direction} className={`room-map__room-exit-add--${direction}`} onClick={connectRoom}></div>;
     }
 };
 

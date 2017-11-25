@@ -6,8 +6,12 @@ describe('The Action generator functions', () => {
         expect(actions.setAreaInfo).to.be.a('function');
     });
 
-    it('knows how to make an Add Roomaction', () => {
+    it('knows how to make an Add Room action', () => {
         expect(actions.addRoom).to.be.a('function');
+    });
+
+    it('knows how to make an Add and Connect Room action', () => {
+        expect(actions.addAndConnectRoom).to.be.a('function');
     });
 
     it('knows how to make a Set Room Info', () => {
