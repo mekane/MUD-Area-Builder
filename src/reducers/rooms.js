@@ -51,7 +51,6 @@ const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
         case 'ADD_AND_CONNECT_ROOM':
             if (!action.sourceRoomId || !action.direction)
                 return state;
-
             newRoomId = nextRoomId();
             newRoom = Object.assign({}, defaultRoom(), {id: newRoomId}, action.roomInfo);
             newRoom = addExit(newRoom, oppositeDirection(action.direction), action.sourceRoomId);

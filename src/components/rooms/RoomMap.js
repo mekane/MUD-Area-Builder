@@ -11,7 +11,6 @@ const exits = ['n', 'e', 's', 'w'];
 const cssValueForCoordinate = (val) => val * (roomSize + gapBetweenRooms);
 
 function addRoom(action) {
-    console.log('add and connect', action);
     app.store.dispatch(action);
 }
 
