@@ -5,14 +5,14 @@ function setAreaInfo(areaInfo) {
     }
 }
 
-function addRoom(newRoomInfo) {
+function addRoom(newRoomInfo = {}) {
     return {
         type: 'ADD_ROOM',
         roomInfo: newRoomInfo
     }
 }
 
-function addAndConnectRoom(sourceRoomId, direction, roomInfo) {
+function addAndConnectRoom(sourceRoomId, direction, roomInfo = {}) {
     return {
         type: 'ADD_AND_CONNECT_ROOM',
         sourceRoomId,

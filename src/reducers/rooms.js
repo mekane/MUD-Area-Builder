@@ -1,31 +1,77 @@
-const defaultState = () => {
-    return {
-        byId: {},
-        lastId: 0
-    };
-};
+const defaultState = () => ({
+    byId: {},
+    lastId: 0
+});
 
-const defaultRoom = {
+const defaultRoom = () => ({
     name: '',
     description: '',
     exit: {}
-};
+});
+
+function addExit(room, direction, destination) {
+    if (!room || !direction)
+        return room;
+
+    const updatedRoom = Object.assign({}, {exit: {}}, room);
+
+    updatedRoom.exit[direction] = {
+        destination
+    };
+    return updatedRoom;
+}
+
+function oppositeDirection(direction) {
+    if (direction === 'n')
+        return 's';
+    if (direction === 'e')
+        return 'w';
+    if (direction === 's')
+        return 'n';
+    if (direction === 'w')
+        return 'e';
+    return '';
+}
 
 const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
+    let newRoomId = 0;
+    let newRoom = {};
+
     switch (action.type) {
         case 'ADD_ROOM':
-            const newId = nextRoomId();
-            const newRoom = Object.assign({}, defaultRoom, {id: newId}, action.roomInfo);
+            newRoomId = nextRoomId();
+            newRoom = Object.assign({}, defaultRoom(), {id: newRoomId}, action.roomInfo);
             return {
                 byId: Object.assign({}, state.byId, {
-                    [newId]: newRoom
+                    [newRoomId]: newRoom
                 }),
-                lastId: newId
+                lastId: newRoomId
             };
+            break;
+        case 'ADD_AND_CONNECT_ROOM':
+            if (!action.sourceRoomId || !action.direction)
+                return state;
+
+            newRoomId = nextRoomId();
+            newRoom = Object.assign({}, defaultRoom(), {id: newRoomId}, action.roomInfo);
+            newRoom = addExit(newRoom, oppositeDirection(action.direction), action.sourceRoomId);
+
+            const newState = {
+                byId: Object.assign({}, state.byId, {
+                    [newRoomId]: newRoom
+                }),
+                lastId: newRoomId
+            };
+
+            let sourceRoom = newState.byId[action.sourceRoomId];
+            let roomWithExit = addExit(sourceRoom, action.direction, newRoomId);
+            newState.byId[action.sourceRoomId] = roomWithExit;
+
+            return newState;
             break;
         case 'SET_ROOM':
             const existingRoom = state.byId[action.roomInfo.id] || {};
-            const updatedRoom = Object.assign({}, defaultRoom, existingRoom, action.roomInfo);
+            const updatedRoom = Object.assign({}, defaultRoom(), existingRoom, action.roomInfo);
             return {
                 byId: Object.assign({}, state.byId, {
                     [action.roomInfo.id]: updatedRoom

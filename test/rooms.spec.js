@@ -4,10 +4,10 @@ const deepFreeze = require('deep-freeze');
 const actions = require('../src/actions.js');
 const getNextState = require('../src/reducers/rooms.js');
 
-const defaultState = {
+const defaultState = deepFreeze({
     byId: {},
     lastId: 0
-};
+});
 
 describe('Room State - the reducer that handles the "rooms" property of the main app state', () => {
     describe('adding rooms', () => {
@@ -135,15 +135,13 @@ describe('Room State - the reducer that handles the "rooms" property of the main
 
     describe('adding and connecting rooms', () => {
         it('should return the identical original state if called with missing data', () => {
-            const badActionMissing1 = actions.addAndConnectRoom({}, 'n');
-            const badActionMissing2 = actions.addAndConnectRoom({});
-            const badActionMissing3 = actions.addAndConnectRoom();
+            const badActionMissingDirection = actions.addAndConnectRoom(1);
+            const badActionMissingSource = actions.addAndConnectRoom();
 
             const originalState = {};
 
-            expect(getNextState(originalState, badActionMissing1)).to.equal(originalState);
-            expect(getNextState(originalState, badActionMissing2)).to.equal(originalState);
-            expect(getNextState(originalState, badActionMissing3)).to.equal(originalState);
+            expect(getNextState(originalState, badActionMissingDirection)).to.equal(originalState);
+            expect(getNextState(originalState, badActionMissingSource)).to.equal(originalState);
         });
 
         it('should add the new room and add an exit in the appropriate direction from the source room', () => {
@@ -169,7 +167,6 @@ describe('Room State - the reducer that handles the "rooms" property of the main
             expect(actualState).to.deep.equal(expectedState);
         });
     });
-
 
     describe('updating rooms', () => {
         it('should update existing rooms based on the id passed in the roomInfo', () => {
@@ -246,9 +243,8 @@ describe('Room State - the reducer that handles the "rooms" property of the main
         });
 
         it('should be able to continue from a known last ID, regardless of what rooms are in the list', () => {
-            const originalState = Object.assign(defaultState, {
-                lastId: 3
-            });
+            const originalState = Object.assign({}, defaultState);
+            originalState.lastId = 3;
 
             const expectedState = {
                 byId: {
