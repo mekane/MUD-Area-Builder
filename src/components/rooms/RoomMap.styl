@@ -1,7 +1,45 @@
 roomSize = 80px
+gapBetweenRooms = 40px
+
+$exit-line
+  border 1px solid black
+  height gapBetweenRooms
+  position absolute
+  width gapBetweenRooms
+
+$exit-add-arrow
+  background #cfc
+  height gapBetweenRooms
+  position absolute
+  width gapBetweenRooms
+
+  &:hover
+    background #beb
+    cursor pointer
+
+$north
+  left 50%
+  top -(gapBetweenRooms + 2)
+  transform translateX(-50%)
+
+$east
+  right -(gapBetweenRooms + 2)
+  transform translateY(-50%)
+  top 50%
+
+$south
+  bottom -(gapBetweenRooms + 2)
+  left 50%
+  transform translateX(-50%)
+
+$west
+  left -(gapBetweenRooms + 2)
+  top 50%
+  transform translateY(-50%)
+
 
 .room-map
-  padding 40px
+  padding roomSize
   position relative
 
   &__room
@@ -10,3 +48,35 @@ roomSize = 80px
     height roomSize
     position absolute
     width roomSize
+
+  &__room-exit--n
+    @extend $exit-line
+    @extend $north
+
+  &__room-exit--e
+    @extend $exit-line
+    @extend $east
+
+  &__room-exit--s
+    @extend $exit-line
+    @extend $south
+
+  &__room-exit--w
+    @extend $exit-line
+    @extend $west
+
+  &__room-exit-add--n
+    @extend $exit-add-arrow
+    @extend $north
+
+  &__room-exit-add--e
+    @extend $exit-add-arrow
+    @extend $east
+
+  &__room-exit-add--s
+    @extend $exit-add-arrow
+    @extend $south
+
+  &__room-exit-add--w
+    @extend $exit-add-arrow
+    @extend $west
