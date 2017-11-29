@@ -46,14 +46,6 @@ const RoomMap = ({areaInfo, roomsData}) => {
                 </div>
             </div>
         );
-
-        //TODO: add room action on click hover arrow
-        //TODO: add "connect rooms" util function and auto-connect rooms when adding
-        //TODO: edit room popup on room click
-        //TODO: auto-show edit room for new room when clicking hover arrow
-        //TODO: size the room-map to fit all the rooms, make its container scroll: auto
-        //TODO: translate the whole room-map so negative indices are positive
-        //TODO: draw prettier exit and "add" arrow
     };
 
     const roomsMapped = mapper.generateCoordinates(roomsData.byId);
