@@ -169,6 +169,29 @@ describe('Room State - the reducer that handles the "rooms" property of the main
     });
 
     describe('updating rooms', () => {
+        it('should return the original state, unmodified, if the room if is missing', () => {
+            const originalState = {
+                byId: {
+                    1: {id: 1, name: 'test', description: '', exit: {}}
+                },
+                lastId: 1
+            };
+
+            const updateRoomActionNoId = actions.setRoomInfo({
+                name: 'no id',
+                description: 'new description'
+            });
+
+            const updateRoomActionIdNotFound = actions.setRoomInfo({
+                id: 99,
+                name: 'no room with this id',
+                description: 'new description'
+            });
+
+            expect(getNextState(originalState, updateRoomActionNoId)).to.equal(originalState);
+            expect(getNextState(originalState, updateRoomActionIdNotFound)).to.equal(originalState);
+        });
+
         it('should update existing rooms based on the id passed in the roomInfo', () => {
             const originalState = {
                 byId: {

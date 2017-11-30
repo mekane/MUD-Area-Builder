@@ -69,11 +69,19 @@ const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
             return newState;
             break;
         case 'SET_ROOM':
-            const existingRoom = state.byId[action.roomInfo.id] || {};
+            const roomId = action.roomInfo.id;
+            if ( typeof roomId === 'undefined' || roomId == null )
+                return state;
+            
+            const existingRoom = state.byId[roomId];
+            
+            if ( !existingRoom )
+                return state;
+            
             const updatedRoom = Object.assign({}, defaultRoom(), existingRoom, action.roomInfo);
             return {
                 byId: Object.assign({}, state.byId, {
-                    [action.roomInfo.id]: updatedRoom
+                    [roomId]: updatedRoom
                 }),
                 lastId: state.lastId
             };
