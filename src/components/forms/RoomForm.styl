@@ -1,17 +1,19 @@
-.area-info-form
+.room-form
+  position absolute
+  right 0
+  top 0
   width 300px
 
   &__label
     @extend $flex-between
     @extend $form-label
 
-  &__area-name
-  &__file-name
-  &__min-level
-  &__max-level
-  &__author-name
-  &__min-vnum
-  &__max-vnum
+  &__checkbox-label
+    @extend $form-label
+
+
+  &__room-name
+  &__room-description
     @extend $form-input
 
   &__update
