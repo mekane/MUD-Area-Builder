@@ -33,7 +33,10 @@ class RoomForm extends React.Component {
 
     updateInfo(that) {
         return function (e) {
-            const room = that.state.room;
+            let room = that.state.room;
+
+            console.log('updating', room);
+
             if (room.id)
                 app.store.dispatch(app.actions.setRoomInfo(room));
             else
@@ -47,13 +50,9 @@ class RoomForm extends React.Component {
         const value = target.value;
         const name = target.name;
 
-        console.log('handle change', name, value);
+        const newRoomState = Object.assign({}, this.state.room, {[name]: value});
 
-        this.setState({
-            room: {
-                [name]: value
-            }
-        });
+        this.setState({room: newRoomState});
     }
 
     handleExitInputChange(event) {
@@ -63,9 +62,7 @@ class RoomForm extends React.Component {
 
         console.log('handle change', name, value);
 
-        const newHasExitState = Object.assign({}, this.state.hasExit, {
-            [name]: value
-        });
+        const newHasExitState = Object.assign({}, this.state.hasExit, {[name]: value});
 
         this.setState({hasExit: newHasExitState});
     }
