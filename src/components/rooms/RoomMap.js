@@ -26,7 +26,7 @@ const Exit = (room, direction) => {
     }
 };
 
-const RoomMap = ({areaInfo, roomsData}) => {
+const RoomMapComponent = ({areaInfo, roomsData, setActiveRoom}) => {
     const vnum = vnumLogic.generator(areaInfo.minVnum);
 
     const Room = (room) => {
@@ -37,8 +37,14 @@ const RoomMap = ({areaInfo, roomsData}) => {
             transform: `translate(${x}px, ${y}px)`
         };
 
+        function clickHandler(roomId) {
+            return function(e) {
+                setActiveRoom(roomId);
+            };
+        }
+
         return (
-            <div key={room.id} className="room-map__room" style={style}>
+            <div key={room.id} className="room-map__room" style={style} onClick={clickHandler(room.id)}>
                 <div className="room-map__room-name">#{ vnum(room.id) } { room.name }</div>
                 <div className="room-map__room-coordinates">{ room.coordinates.x }, { room.coordinates.y }</div>
                 <div className="room-map__room-exit">
@@ -59,4 +65,4 @@ const RoomMap = ({areaInfo, roomsData}) => {
     );
 };
 
-module.exports = RoomMap;
+module.exports = RoomMapComponent;

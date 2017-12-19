@@ -1,64 +1,116 @@
-const React = require('react'); //because the JSX transpiles to React.createElement(...) we need this here implicitly
-const room = require('../../logic/rooms.js');
+const React = require('react');
+const roomLogic = require('../../logic/rooms.js');
 
 class RoomForm extends React.Component {
 
     constructor(props) {
         super(props);
 
-        this.room = props.room || {};
+        this.state = RoomForm.generateComponentState(props.room);
 
-        this.state = {
+        this.handleRoomInputChange = this.handleRoomInputChange.bind(this);
+        this.handleExitInputChange = this.handleExitInputChange.bind(this);
+    }
+
+    static generateComponentState(room) {
+        return {
             hasExit: {
-                n: room.hasExit(this.room, 'n'),
-                e: room.hasExit(this.room, 'e'),
-                s: room.hasExit(this.room, 's'),
-                w: room.hasExit(this.room, 'w')
-            }
+                n: roomLogic.hasExit(room, 'n'),
+                e: roomLogic.hasExit(room, 'e'),
+                s: roomLogic.hasExit(room, 's'),
+                w: roomLogic.hasExit(room, 'w')
+            },
+            room: Object.assign({}, room)
         };
     }
 
-    getRoom() {
-        const newRoomData = {
-            name: this.roomNameInput.value,
-            description: this.roomDescriptionInput.value
-        };
-
-        if (typeof(room.id) !== 'undefined' && room.id != null) {
-            newRoomData.id = room.id;
+    componentWillReceiveProps(nextProps) {
+        console.log('Room form new room', nextProps.room);
+        if (nextProps && nextProps.room && nextProps.room !== this.state.room) {
+            this.setState(RoomForm.generateComponentState(nextProps.room));
         }
-
-        return newRoomData;
     }
 
     updateInfo(that) {
-        return function(e) {
-            const room = that.getRoom();
-            if ( room.id )
+        return function (e) {
+            const room = that.state.room;
+            if (room.id)
                 app.store.dispatch(app.actions.setRoomInfo(room));
             else
                 app.store.dispatch(app.actions.addRoom(room));
         }
     }
 
+    handleRoomInputChange(event) {
+        const target = event.target;
+        //const value = target.type === 'checkbox' ? target.checked : target.value;
+        const value = target.value;
+        const name = target.name;
+
+        console.log('handle change', name, value);
+
+        this.setState({
+            room: {
+                [name]: value
+            }
+        });
+    }
+
+    handleExitInputChange(event) {
+        const target = event.target;
+        const value = target.checked;
+        const name = target.name;
+
+        console.log('handle change', name, value);
+
+        const newHasExitState = Object.assign({}, this.state.hasExit, {
+            [name]: value
+        });
+
+        this.setState({hasExit: newHasExitState});
+    }
+
     render() {
+        console.log('room form render', this.state);
+
         return <form className="room-form">
+            <span>Room {this.state.room.id}</span>
             <label className="room-form__label">
                 Room Name:
-                <input className="room-form__room-name" type="text" ref={(input) => this.roomNameInput = input}
-                       defaultValue={this.room.name}/>
+                <input className="room-form__room-name" type="text" name="name" value={this.state.room.name}
+                       onChange={this.handleRoomInputChange}/>
             </label>
 
             <label className="room-form__label">
                 Description:
-                <input className="room-form__room-description" type="text"
-                       ref={(input) => this.roomDescriptionInput = input} defaultValue={this.room.description}/>
+                <input className="room-form__room-description" type="text" name="description"
+                       value={this.state.room.description}
+                       onChange={this.handleRoomInputChange}/>
             </label>
 
             <header>Exits</header>
             <label className="room-form__checkbox-label">
-                <input type="checkbox" ref={(input) => this.hasNorthExitInput = input} defaultValue={this.state.hasExit['n']} />
+                <input type="checkbox" checked={this.state.hasExit['n']} name="n"
+                       onChange={this.handleExitInputChange}/>
                 North
+            </label>
+
+            <label className="room-form__checkbox-label">
+                <input type="checkbox" checked={this.state.hasExit['e']} name="e"
+                       onChange={this.handleExitInputChange}/>
+                East
+            </label>
+
+            <label className="room-form__checkbox-label">
+                <input type="checkbox" checked={this.state.hasExit['s']} name="s"
+                       onChange={this.handleExitInputChange}/>
+                South
+            </label>
+
+            <label className="room-form__checkbox-label">
+                <input type="checkbox" checked={this.state.hasExit['w']} name="w"
+                       onChange={this.handleExitInputChange}/>
+                West
             </label>
 
             <button type="button" className="room-form__update" onClick={this.updateInfo(this)}>Update</button>

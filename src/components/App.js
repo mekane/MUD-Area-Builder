@@ -1,23 +1,47 @@
-const React = require('react'); //because the JSX transpiles to React.createElement(...) we need this here implicitly
+const React = require('react');
 const AreaInfoForm = require('./forms/AreaInfoForm.js');
 const RoomList = require('./rooms/RoomList.js');
 const RoomMap = require('./rooms/RoomMap.js');
 const RoomForm = require('./forms/RoomForm.js');
 
-const App = ({state}) => (
-    <div className="app">
-        <div className="app__sidebar">
-            <h2>Area Info</h2>
-            <AreaInfoForm areaInfo={state.areaInfo}></AreaInfoForm>
-            <h2>Rooms</h2>
-            <RoomList areaInfo={state.areaInfo} roomsData={state.rooms}></RoomList>
-        </div>
-        <div className="app__editor">
-            <h2>Map</h2>
-            <RoomMap areaInfo={state.areaInfo} roomsData={state.rooms}></RoomMap>
-            <RoomForm room={state.rooms[0]}></RoomForm>
-        </div>
-    </div>
-);
+class AppComponent extends React.Component {
+    constructor(props) {
+        super(props);
 
-module.exports = App;
+        this.activeRoomChanged = this.activeRoomChanged.bind(this);
+
+        this.state = {
+            activeRoom: null
+        };
+    }
+
+    activeRoomChanged(newRoomId) {
+        const newActiveRoom = this.props.state.rooms.byId[newRoomId] || null;
+        this.setState({
+            activeRoom: newActiveRoom
+        });
+    }
+
+    render() {
+        const areaInfo = this.props.state.areaInfo;
+        const rooms = this.props.state.rooms;
+
+        console.log('App render props, state', this.props, this.state);
+
+        return <div className="app">
+            <div className="app__sidebar">
+                <h2>Area Info</h2>
+                <AreaInfoForm areaInfo={areaInfo}></AreaInfoForm>
+                <h2>Rooms</h2>
+                <RoomList areaInfo={areaInfo} roomsData={rooms} setActiveRoom={this.activeRoomChanged}></RoomList>
+            </div>
+            <div className="app__editor">
+                <h2>Map</h2>
+                <RoomMap areaInfo={areaInfo} roomsData={rooms} setActiveRoom={this.activeRoomChanged}></RoomMap>
+                <RoomForm room={this.state.activeRoom}></RoomForm>
+            </div>
+        </div>
+    }
+}
+
+module.exports = AppComponent;

@@ -16,6 +16,7 @@ See `grunt -h` for available tasks. The important ones are:
 
 ## TODO List
 
+   * Mapper - deal with rooms that are not connected (either ignore them when drawing or give them reasonable default coordinates)
    * Stateful Room form component that keeps internal track of whether the room had exits or not
    * Stateful Map component(?) that keeps track of which room is selected. This could also be internal editor state that is passed down into the components. Knows if room form is showing or not.
    * edit room popup on room click
