@@ -26,8 +26,6 @@ class AppComponent extends React.Component {
         const rooms = this.props.state.rooms;
         const activeRoom = this.props.state.rooms.byId[this.state.activeRoomId] || null;
 
-        console.log('App render props, state', this.props, this.state);
-
         return <div className="app">
             <div className="app__sidebar">
                 <h2>Area Info</h2>

@@ -25,7 +25,6 @@ class RoomForm extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log('Room form new room', nextProps.room);
         if (nextProps && nextProps.room && nextProps.room !== this.state.room) {
             this.setState(RoomForm.generateComponentState(nextProps.room));
         }
@@ -34,8 +33,6 @@ class RoomForm extends React.Component {
     updateInfo(that) {
         return function (e) {
             let room = that.state.room;
-
-            console.log('updating', room);
 
             if (room.id)
                 app.store.dispatch(app.actions.setRoomInfo(room));
@@ -60,16 +57,12 @@ class RoomForm extends React.Component {
         const value = target.checked;
         const name = target.name;
 
-        console.log('handle change', name, value);
-
         const newHasExitState = Object.assign({}, this.state.hasExit, {[name]: value});
 
         this.setState({hasExit: newHasExitState});
     }
 
     render() {
-        console.log('room form render', this.state);
-
         return <form className="room-form">
             <span>Room {this.state.room.id}</span>
             <label className="room-form__label">
