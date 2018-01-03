@@ -11,22 +11,20 @@ class AppComponent extends React.Component {
         this.activeRoomChanged = this.activeRoomChanged.bind(this);
 
         this.state = {
-            activeRoom: null
+            activeRoomId: null
         };
     }
 
     activeRoomChanged(newRoomId) {
-        const newActiveRoom = this.props.state.rooms.byId[newRoomId] || null;
         this.setState({
-            activeRoom: newActiveRoom
+            activeRoomId: newRoomId
         });
     }
 
     render() {
         const areaInfo = this.props.state.areaInfo;
         const rooms = this.props.state.rooms;
-
-        console.log('App render props, state', this.props, this.state);
+        const activeRoom = this.props.state.rooms.byId[this.state.activeRoomId];
 
         return <div className="app">
             <div className="app__sidebar">
@@ -38,7 +36,7 @@ class AppComponent extends React.Component {
             <div className="app__editor">
                 <h2>Map</h2>
                 <RoomMap areaInfo={areaInfo} roomsData={rooms} setActiveRoom={this.activeRoomChanged}></RoomMap>
-                <RoomForm room={this.state.activeRoom}></RoomForm>
+                <RoomForm room={activeRoom}></RoomForm>
             </div>
         </div>
     }
