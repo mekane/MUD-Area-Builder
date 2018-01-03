@@ -63,6 +63,9 @@ class RoomForm extends React.Component {
     }
 
     render() {
+        if (!this.props.room)
+            return null; //don't render the room form when there is no active room
+
         return <form className="room-form">
             <span>Room {this.state.room.id}</span>
             <label className="room-form__label">

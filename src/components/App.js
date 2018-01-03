@@ -24,7 +24,7 @@ class AppComponent extends React.Component {
     render() {
         const areaInfo = this.props.state.areaInfo;
         const rooms = this.props.state.rooms;
-        const activeRoom = this.props.state.rooms.byId[this.state.activeRoomId] || null;
+        const activeRoom = this.props.state.rooms.byId[this.state.activeRoomId];
 
         return <div className="app">
             <div className="app__sidebar">
