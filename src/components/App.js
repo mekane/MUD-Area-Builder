@@ -36,7 +36,7 @@ class AppComponent extends React.Component {
             <div className="app__editor">
                 <h2>Map</h2>
                 <RoomMap areaInfo={areaInfo} roomsData={rooms} setActiveRoom={this.activeRoomChanged}></RoomMap>
-                <RoomForm room={activeRoom}></RoomForm>
+                <RoomForm room={activeRoom} setActiveRoom={this.activeRoomChanged}></RoomForm>
             </div>
         </div>
     }

@@ -1,10 +1,24 @@
 exitRowLabelHeight = 30px
+formBorderColor = #ccc
 
 .room-form
+  border 1px solid formBorderColor
+  border-radius 4px
+  padding 40px 6px 12px
   position absolute
   right 0
   top 0
   width 300px
+
+  &__title
+    background-color #eee
+    border-bottom 1px solid formBorderColor
+    left 0
+    height 28px
+    padding 6px
+    position absolute
+    right 0
+    top 0
 
   &__label
     @extend $flex-between
@@ -35,11 +49,17 @@ exitRowLabelHeight = 30px
     @extend $form-input
     width 40px
 
+  &__controls
+    clear both
+    margin-left 50%
+    padding-top 12px
+    transform translateX(-50%)
+    width 200px
+
   &__update
     @extend $button
-    margin-left 50%
-    margin-top 12px
     padding 4px 32px
-    transform translateX(-50%)
-    &:hover
-      background-color #f0faf0
+
+  &__cancel
+    @extend $button
+    margin-left 8px

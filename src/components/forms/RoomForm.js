@@ -8,6 +8,7 @@ class RoomForm extends React.Component {
 
         this.state = RoomForm.generateComponentState(props.room);
 
+        this.cancel = this.cancel.bind(this);
         this.handleRoomInputChange = this.handleRoomInputChange.bind(this);
         this.handleExitToggleChange = this.handleExitToggleChange.bind(this);
         this.handleExitRoomChange = this.handleExitRoomChange.bind(this);
@@ -52,6 +53,10 @@ class RoomForm extends React.Component {
         }
     }
 
+    cancel(event) {
+        this.props.setActiveRoom(null);
+    }
+
     handleRoomInputChange(event) {
         const target = event.target;
         //const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -94,7 +99,7 @@ class RoomForm extends React.Component {
         const hiddenExitRoomFieldClass = 'room-form__room-input-label--hidden';
 
         return <form className="room-form">
-            <span>Exiting Room {this.state.room.id}</span>
+            <div className="room-form__title">Editing Room {this.state.room.id}</div>
             <label className="room-form__label">
                 Room Name:
                 <input className="room-form__room-name" type="text" name="name" value={this.state.room.name}
@@ -148,7 +153,10 @@ class RoomForm extends React.Component {
                 <input className="room-form__exit-destination-input" type="number" value={this.roomDestination('w')} name="w" onChange={this.handleExitRoomChange}/>
             </label>
 
-            <button type="button" className="room-form__update" onClick={this.updateInfo(this)}>Update</button>
+            <div className="room-form__controls">
+                <button type="button" className="room-form__update" onClick={this.updateInfo(this)}>Update</button>
+                <button type="button" className="room-form__cancel" onClick={this.cancel}>Cancel</button>
+            </div>
         </form>
     }
 }
