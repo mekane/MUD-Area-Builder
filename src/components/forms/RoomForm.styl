@@ -1,3 +1,5 @@
+exitRowLabelHeight = 30px
+
 .room-form
   position absolute
   right 0
@@ -8,13 +10,30 @@
     @extend $flex-between
     @extend $form-label
 
-  &__checkbox-label
-    @extend $form-label
-
-
   &__room-name
   &__room-description
     @extend $form-input
+
+  &__checkbox-label
+    @extend $form-label
+    clear left
+    float left
+    height exitRowLabelHeight
+    padding 0
+
+  &__room-input-label
+    @extend $form-label
+    float left
+    font-size 0
+    height exitRowLabelHeight
+    margin-left 10px
+    padding 0
+    &--hidden
+      display none
+
+  &__exit-destination-input
+    @extend $form-input
+    width 40px
 
   &__update
     @extend $button
