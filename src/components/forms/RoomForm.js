@@ -40,7 +40,10 @@ class RoomForm extends React.Component {
         return function (e) {
             let room = that.state.room;
 
-            //todo: delete exits that are not checked
+            ['n', 'e', 's', 'w'].forEach(dir => {
+                if (!that.state.hasExit[dir])
+                    delete room.exit[dir];
+            });
 
             if (room.id)
                 app.store.dispatch(app.actions.setRoomInfo(room));
