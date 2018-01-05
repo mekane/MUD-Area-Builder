@@ -11,6 +11,7 @@ const defaultState = {
         lastId: 0
     }
 };
+deepFreeze(defaultState);
 
 describe('The Test App root reducer', () => {
     it('should be a function', () => {

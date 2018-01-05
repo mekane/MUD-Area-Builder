@@ -8,18 +8,29 @@ const reducer = require('../reducers/appState.js');
 const App = require('../components/App.js');
 
 const store = Redux.createStore(reducer);
+const appStateHistory = {
+    past: [],
+    current: null,
+    future: []
+};
 
 /**
  * This script is browserified, but it is the entry point for the browser to run the application
  */
 const appElement = document.getElementById('app');
 
-function render() {
-    ReactDOM.render(<App state={store.getState()}></App>, appElement);
-    console.log('rendered state', store.getState());
+function handleAppAction() {
+    const newState = store.getState();
+    appStateHistory.push(newState);
+    render(newState);
 }
 
-store.subscribe(render);
+function render(nextState) {
+    ReactDOM.render(<App state={nextState}></App>, appElement);
+    console.log('rendered state', nextState);
+}
+
+store.subscribe(handleAppAction);
 
 /* === LOAD TEST DATA === */
 const testDataActions = require('../../exampleData/fourRoomsInASquare.json');

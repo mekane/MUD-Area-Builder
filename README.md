@@ -16,8 +16,6 @@ See `grunt -h` for available tasks. The important ones are:
 
 ## TODO List
 
-   * Hook up logic in the room form for adding and removing exits. Add room number inputs along with exits.
-   * Style edit room form
    * auto-show edit room for new room when clicking hover arrow
    * detect adjacent rooms when adding new rooms and auto-connect them to keep a normal structure
    * Mapper - deal with rooms that are not connected (either ignore them when drawing or give them reasonable default coordinates)

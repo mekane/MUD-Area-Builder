@@ -28,9 +28,23 @@ function setRoomInfo(updatedRoomInfo) {
     }
 }
 
+function undo() {
+    return {
+        type: 'UNDO'
+    };
+}
+
+function redo() {
+    return {
+        type: 'REDO'
+    };
+}
+
 module.exports = {
     setAreaInfo,
     addRoom,
     addAndConnectRoom,
-    setRoomInfo
+    setRoomInfo,
+    undo,
+    redo
 };
