@@ -132,7 +132,50 @@ describe('The high level app history reducer', function () {
         expect(actualState).to.deep.equal(expectedHistoryState);
     });
 
-    it('on UNDO, it replaces the present state by popping the last past state, and puts the present state in the past array', () => {
+    it('clears the future state when a regular action fires', () => {
+        const initialState = {
+            past: [],
+            present: getNextAppState(),
+            future: [
+                {
+                    key: 'test past state'
+                }
+            ]
+        };
+
+        const expectedHistoryState = {
+            past: [
+                {
+                    areaInfo: {},
+                    rooms: {
+                        byId: {},
+                        lastId: 0
+                    }
+                }
+            ],
+            present: {
+                areaInfo: {},
+                rooms: {
+                    byId: {
+                        1: {
+                            id: 1,
+                            name: 'test',
+                            description: '',
+                            exit: {}
+                        }
+                    },
+                    lastId: 1
+                }
+            },
+            future: []
+        };
+
+        const actualState = getNextHistoryState(initialState, actions.addRoom({name: 'test'}));
+
+        expect(actualState).to.deep.equal(expectedHistoryState);
+    });
+
+    it('on UNDO, it replaces the present state by popping the last past state, and un-shifts the present state onto the beginning of the future array', () => {
         const initialState = {
             past: [
                 {
@@ -316,5 +359,123 @@ describe('The high level app history reducer', function () {
 
         expect(actualStateAfterOneUndo).to.deep.equal(expectedStateAfterOneUndo);
         expect(actualStateAfterTwoUndos).to.deep.equal(expectedStateAfterTwoUndos);
+    });
+
+    it('on REDO it shifts the first future item, sets it as the new present, and pushes present onto the past array', () => {
+        const initialState = {
+            past: [
+                {
+                    key: "past1"
+                }
+            ],
+            present: {
+                key: "past2"
+            },
+            future: [
+                {
+                    key: "past3"
+                },
+                {
+                    key: "present"
+                }
+            ]
+        };
+
+        const expectedStateAfterOneRedo = {
+            past: [
+                {
+                    key: "past1"
+                },
+                {
+                    key: "past2"
+                }
+            ],
+            present: {
+                key: "past3"
+            },
+            future: [
+                {
+                    key: "present"
+                }
+            ]
+        };
+
+        const expectedStateAfterTwoRedos = {
+            past: [
+                {
+                    key: "past1"
+                },
+                {
+                    key: "past2"
+                },
+                {
+                    key: "past3"
+                }
+            ],
+            present: {
+                key: "present"
+            },
+            future: []
+        };
+
+        const actualStateAfterOneRedo = getNextHistoryState(initialState, actions.redo());
+        const actualStateAfterTwoRedos = getNextHistoryState(actualStateAfterOneRedo, actions.redo());
+
+        expect(actualStateAfterOneRedo).to.deep.equal(expectedStateAfterOneRedo);
+        expect(actualStateAfterTwoRedos).to.deep.equal(expectedStateAfterTwoRedos);
+    });
+
+    it('does not have any effect to REDO if there are no more future states', () => {
+        const initialState = {
+            past: [
+                {
+                    key: "past1"
+                }
+            ],
+            present: {
+                key: "past2"
+            },
+            future: [
+                {
+                    key: "past3"
+                }
+            ]
+        };
+
+        const expectedStateAfterOneRedo = {
+            past: [
+                {
+                    key: "past1"
+                },
+                {
+                    key: "past2"
+                }
+            ],
+            present: {
+                key: "past3"
+            },
+            future: []
+        };
+
+        const expectedStateAfterTwoRedos = {
+            past: [
+                {
+                    key: "past1"
+                },
+                {
+                    key: "past2"
+                }
+            ],
+            present: {
+                key: "past3"
+            },
+            future: []
+        };
+
+        const actualStateAfterOneRedo = getNextHistoryState(initialState, actions.redo());
+        const actualStateAfterTwoRedos = getNextHistoryState(actualStateAfterOneRedo, actions.redo());
+
+        expect(actualStateAfterOneRedo).to.deep.equal(expectedStateAfterOneRedo);
+        expect(actualStateAfterTwoRedos).to.deep.equal(expectedStateAfterTwoRedos);
     });
 });
