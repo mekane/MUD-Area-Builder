@@ -132,6 +132,14 @@ describe('The high level app history reducer', function () {
         expect(actualState).to.deep.equal(expectedHistoryState);
     });
 
+    it('does not push a new present or undo state if the regular action did not create a new state', () => {
+        const expectedState = defaultState;
+        const nextState = getNextHistoryState(defaultState);
+        const actualState = getNextHistoryState(nextState);
+
+        expect(actualState).to.deep.equal(expectedState);
+    });
+
     it('clears the future state when a regular action fires', () => {
         const initialState = {
             past: [],
