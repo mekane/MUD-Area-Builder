@@ -16,6 +16,9 @@ const appHistoryReducer = (currentState = defaultState(), action = {type: null})
     }
 
     if ( action.type === 'UNDO' ) {
+        if ( currentState.past.length < 1 )
+            return currentState;
+        
         const newPast = currentState.past.slice();
         const newPresent = newPast.pop();
         const newFuture = [currentState.present].concat(currentState.future);

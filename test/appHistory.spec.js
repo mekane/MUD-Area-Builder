@@ -273,4 +273,48 @@ describe('The high level app history reducer', function () {
         expect(actualStateAfterTwoUndos).to.deep.equal(expectedStateAfterTwoUndos);
         expect(actualStateAfterThreeUndos).to.deep.equal(expectedStateAfterThreeUndos);
     });
+
+    it('does not have any effect to UNDO if there are no more past states', () => {
+        const initialState = {
+            past: [
+                {
+                    key: "past1"
+                }
+            ],
+            present: {
+                key: "present"
+            },
+            future: []
+        };
+
+        const expectedStateAfterOneUndo = {
+            past: [],
+            present: {
+                key: "past1"
+            },
+            future: [
+                {
+                    key: "present"
+                }
+            ]
+        };
+
+        const expectedStateAfterTwoUndos = {
+            past: [],
+            present: {
+                key: "past1"
+            },
+            future: [
+                {
+                    key: "present"
+                }
+            ]
+        };
+
+        const actualStateAfterOneUndo = getNextHistoryState(initialState, actions.undo());
+        const actualStateAfterTwoUndos = getNextHistoryState(actualStateAfterOneUndo, actions.undo());
+
+        expect(actualStateAfterOneUndo).to.deep.equal(expectedStateAfterOneUndo);
+        expect(actualStateAfterTwoUndos).to.deep.equal(expectedStateAfterTwoUndos);
+    });
 });
