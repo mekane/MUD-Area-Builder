@@ -11,7 +11,7 @@ class AppComponent extends React.Component {
         this.activeRoomChanged = this.activeRoomChanged.bind(this);
 
         this.state = {
-            activeRoomId: null
+            activeRoomId: -1
         };
     }
 
@@ -21,9 +21,18 @@ class AppComponent extends React.Component {
         });
     }
 
+    undo() {
+        app.store.dispatch(app.actions.undo());
+    }
+
+    redo() {
+        app.store.dispatch(app.actions.redo());
+    }
+
     render() {
         const areaInfo = this.props.state.areaInfo;
         const rooms = this.props.state.rooms;
+
         const activeRoom = this.props.state.rooms.byId[this.state.activeRoomId];
 
         return <div className="app">
@@ -37,6 +46,10 @@ class AppComponent extends React.Component {
                 <h2>Map</h2>
                 <RoomMap areaInfo={areaInfo} roomsData={rooms} setActiveRoom={this.activeRoomChanged}></RoomMap>
                 <RoomForm room={activeRoom} setActiveRoom={this.activeRoomChanged}></RoomForm>
+            </div>
+            <div className="app__controls">
+                <button className="app__undo-button" disabled={!this.props.canUndo} onClick={this.undo}>Undo</button>
+                <button className="app__redo-button" disabled={!this.props.canRedo} onClick={this.redo}>Redo</button>
             </div>
         </div>
     }

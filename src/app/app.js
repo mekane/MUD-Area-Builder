@@ -3,7 +3,7 @@ const ReactDOM = require('react-dom');
 const Redux = require('redux');
 
 const actions = require('../actions.js');
-const reducer = require('../reducers/appState.js');
+const reducer = require('../reducers/appHistory.js');
 
 const App = require('../components/App.js');
 
@@ -14,19 +14,25 @@ const store = Redux.createStore(reducer);
  */
 const appElement = document.getElementById('app');
 
-function render() {
-    ReactDOM.render(<App state={store.getState()}></App>, appElement);
-    console.log('rendered state', store.getState());
+function handleAppAction() {
+    const newState = store.getState();
+    render(newState);
 }
 
-store.subscribe(render);
+function render(globalAppState) {
+    const canUndo = globalAppState.past.length;
+    const canRedo = globalAppState.future.length;
+    const appState = globalAppState.present;
+    console.log('render app state', appState);
+    ReactDOM.render(<App state={appState} canUndo={canUndo} canRedo={canRedo}></App>, appElement);
+}
+
+store.subscribe(handleAppAction);
 
 /* === LOAD TEST DATA === */
 const testDataActions = require('../../exampleData/fourRoomsInASquare.json');
 testDataActions.forEach(addRoom => store.dispatch(addRoom));
 /* ---------------------- */
-
-render();
 
 //these will be available in the browser via a global variable called 'app'. See the browserify config in Gruntfile.js
 const app = {
