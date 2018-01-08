@@ -23,8 +23,9 @@ See `grunt -h` for available tasks. The important ones are:
    * translate the whole room-map so negative indices are positive
    * draw prettier exit and "add" arrow
    * 
-   * Add 'Undo'
-   * 
    * save state to local storage
    * export to area file text
    * parse area file and load
+   *
+   * Fix area edit form - it does not properly undo because the inputs are not controlled
+   * It would be nice to make the new room active and being edited when clicking a green square to add one
