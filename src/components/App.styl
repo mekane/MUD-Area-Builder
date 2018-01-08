@@ -1,8 +1,21 @@
 .app
   display flex
+  flex-wrap wrap
   font-family "Lucida Grande", Lucida, Verdana, sans-serif
 
   &__sidebar
+    flex 0 1 auto
 
   &__editor
+    margin-left 24px
+    flex 1 0 auto
+
+  &__controls
+    flex 0 0 100%
+
+  &__undo-button
+    @extend $button
+
+  &__redo-button
+    @extend $button
     margin-left 24px
