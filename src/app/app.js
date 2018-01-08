@@ -16,12 +16,15 @@ const appElement = document.getElementById('app');
 
 function handleAppAction() {
     const newState = store.getState();
-    render(newState.present);
+    render(newState);
 }
 
-function render(appState) {
+function render(globalAppState) {
+    const canUndo = globalAppState.past.length;
+    const canRedo = globalAppState.future.length;
+    const appState = globalAppState.present;
     console.log('render app state', appState);
-    ReactDOM.render(<App state={appState}></App>, appElement);
+    ReactDOM.render(<App state={appState} canUndo={canUndo} canRedo={canRedo}></App>, appElement);
 }
 
 store.subscribe(handleAppAction);

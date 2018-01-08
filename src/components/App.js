@@ -21,6 +21,14 @@ class AppComponent extends React.Component {
         });
     }
 
+    undo() {
+        app.store.dispatch(app.actions.undo());
+    }
+
+    redo() {
+        app.store.dispatch(app.actions.redo());
+    }
+
     render() {
         const areaInfo = this.props.state.areaInfo;
         const rooms = this.props.state.rooms;
@@ -39,7 +47,10 @@ class AppComponent extends React.Component {
                 <RoomMap areaInfo={areaInfo} roomsData={rooms} setActiveRoom={this.activeRoomChanged}></RoomMap>
                 <RoomForm room={activeRoom} setActiveRoom={this.activeRoomChanged}></RoomForm>
             </div>
-            //UNDO and REDO buttons
+            <div className="app__controls">
+                <button className="app__undo-button" disabled={!this.props.canUndo} onClick={this.undo}>Undo</button>
+                <button className="app__redo-button" disabled={!this.props.canRedo} onClick={this.redo}>Redo</button>
+            </div>
         </div>
     }
 }
