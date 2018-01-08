@@ -9,7 +9,9 @@ function exportToAreaFormat(startingVnum, room) {
     return `#${vnum(room.id)}
 ${room.name}~
 ${room.description}
-~`;
+~
+0 0 0
+S`;
 
 }
 
