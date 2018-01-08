@@ -46,7 +46,7 @@ const appHistoryReducer = (currentState = defaultState(), action = {type: null})
     }
 
     return {
-        past: [currentState.present].concat(currentState.past),
+        past: currentState.past.concat(currentState.present),
         present: getNextAppState(currentState.present, action),
         future: []
     };

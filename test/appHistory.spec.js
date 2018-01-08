@@ -78,9 +78,16 @@ describe('The high level app history reducer', function () {
         expect(actualState).to.deep.equal(expectedHistoryState);
     });
 
-    it('continues to push the previous present state in the past array as more regular actions fire', () => {
+    it('continues to append the previous present state to the end of the past array as more regular actions fire', () => {
         const expectedHistoryState = {
             past: [
+                {
+                    areaInfo: {},
+                    rooms: {
+                        byId: {},
+                        lastId: 0
+                    }
+                },
                 {
                     areaInfo: {},
                     rooms: {
@@ -93,13 +100,6 @@ describe('The high level app history reducer', function () {
                             }
                         },
                         lastId: 1
-                    }
-                },
-                {
-                    areaInfo: {},
-                    rooms: {
-                        byId: {},
-                        lastId: 0
                     }
                 }
             ],
