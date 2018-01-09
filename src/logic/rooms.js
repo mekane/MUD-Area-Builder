@@ -6,12 +6,15 @@ const exitDirectionToNumberCode = {
     s: '2',
     w: '3'
 };
+const exitDirections = Object.keys(exitDirectionToNumberCode);
 
 const exitLockToNumberCode = {
     'open': 0,
     'closed': 1,
     'locked': 2 //also implies closed
 };
+
+const roomEndSymbol = 'S';
 
 function exportExit(exitDirection, exitData, vnumComputer = x => x) {
     if (typeof exitDirection !== 'string' || !(exitDirection in exitDirectionToNumberCode))
@@ -42,25 +45,17 @@ function exportToAreaFormat(startingVnum, room) {
     const vnum = vnums.generator(startingVnum);
 
     let exits = '';
-    if (room.exit) {
-        exits = `D0
-~
-~
-0 0 1010
-D1
-~
-~
-0 0 1011
-`;
-    }
+    exitDirections.forEach(direction => {
+        if (room.exit && room.exit[direction])
+            exits += exportExit(direction, room.exit[direction], vnum) + '\n';
+    });
 
     return `#${vnum(room.id)}
 ${room.name}~
 ${room.description}
 ~
 0 0 0
-${exits}S`;
-
+${exits}${roomEndSymbol}`;
 }
 
 const hasExit = (room, direction) => {
