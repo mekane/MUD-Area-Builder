@@ -51,6 +51,16 @@ ${exitKeywords}~
 ${lock} ${keyVnum} ${destinationRoom}`;
 }
 
+function exportExtra(extraData) {
+    if (typeof extraData === 'object' && extraData['keywords'] && extraData['description'])
+        return `E
+${extraData.keywords}~
+${extraData.description}
+~
+`;
+    return '';
+}
+
 function exportToAreaFormat(startingVnum, room) {
     if (typeof startingVnum === 'undefined' || typeof room !== 'object' || typeof room.id === 'undefined')
         return '';
@@ -66,12 +76,20 @@ function exportToAreaFormat(startingVnum, room) {
             exits += exportExit(direction, room.exit[direction], vnum) + '\n';
     });
 
+    let extraDescriptions = '';
+    if (Array.isArray(room.extraDescriptions))
+        extraDescriptions = room.extraDescriptions.map(exportExtra).join('');
+
+    let healRates = '';
+    if (room.healRate)
+        healRates = `H ${room.healRate.hp || 100} M ${room.healRate.mana || 100}` + '\n';
+
     return `#${roomVnum}
 ${room.name}~
 ${room.description}
 ~
 0 ${sector} 0
-${exits}${roomEndSymbol}`;
+${exits}${extraDescriptions}${healRates}${roomEndSymbol}`;
 }
 
 const hasExit = (room, direction) => {

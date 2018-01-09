@@ -376,6 +376,114 @@ S`;
 
             expect(actualOutput).to.equal(expectedOutput);
         });
+
+        it('should export valid extra description objects', () => {
+            const testRoom = {
+                id: "1",
+                name: "Room One",
+                description: "The first room",
+                coordinates: {x: 0, y: 1},
+                extraDescriptions: [
+                    {
+                        keywords: 'extra1',
+                        description: 'extra description one'
+                    },
+                    {
+                        bogus: true,
+                        shouldExport: false
+                    },
+                    {
+                        keywords: 'extra2',
+                        description: 'extra description two'
+                    }
+                ]
+            };
+
+            const expectedOutput = `#1001
+Room One~
+The first room
+~
+0 0 0
+E
+extra1~
+extra description one
+~
+E
+extra2~
+extra description two
+~
+S`;
+            const actualOutput = roomUtils.exportToAreaFormat(1000, testRoom);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it('should export custom mana and healing rates, if defined', () => {
+            const testRoom = {
+                id: "2",
+                name: "Room Two",
+                description: "The second room",
+                coordinates: {x: 0, y: 1},
+                healRate: {
+                    'hp': 101,
+                    'mana': 102
+                }
+            };
+
+            const expectedOutput = `#1002
+Room Two~
+The second room
+~
+0 0 0
+H 101 M 102
+S`;
+            const actualOutput = roomUtils.exportToAreaFormat(1000, testRoom);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it('should export default mana and healing rates, if one is defined and not the other', () => {
+            const testRoom = {
+                id: "2",
+                name: "Room Two",
+                description: "The second room",
+                coordinates: {x: 0, y: 1},
+                healRate: {
+                    'hp': 101
+                }
+            };
+
+            const expectedOutput = `#1002
+Room Two~
+The second room
+~
+0 0 0
+H 101 M 100
+S`;
+            const actualOutput = roomUtils.exportToAreaFormat(1000, testRoom);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it.skip('should export clan ownership, if defined', () => {
+            const testRoom = {
+                id: "3",
+                name: "Room Three",
+                description: "The third room",
+                coordinates: {x: 0, y: 1}
+            };
+
+            const expectedOutput = `#1003
+Room Three~
+The third room
+~
+0 0 0
+S`;
+
+            const actualOutput = roomUtils.exportToAreaFormat(1000, testRoom);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
     });
 
 });
