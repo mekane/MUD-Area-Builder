@@ -313,6 +313,34 @@ S`;
             expect(actualOutput).to.equal(expectedOutput);
         });
 
+        it('exports the room sector code', () => {
+            const testRoom = sectorName => ({
+                id: "1",
+                name: "test",
+                description: "test room",
+                coordinates: {x: 0, y: 1},
+                sector: sectorName
+            });
+
+            const expectedOutput = sectorCode => `#1001
+test~
+test room
+~
+0 ${sectorCode} 0
+S`;
+
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('inside'))).to.equal(expectedOutput('0'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('city'))).to.equal(expectedOutput('1'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('field'))).to.equal(expectedOutput('2'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('forest'))).to.equal(expectedOutput('3'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('hills'))).to.equal(expectedOutput('4'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('mountain'))).to.equal(expectedOutput('5'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('water'))).to.equal(expectedOutput('6'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('deep water'))).to.equal(expectedOutput('7'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('air'))).to.equal(expectedOutput('9'));
+            expect(roomUtils.exportToAreaFormat(1000, testRoom('desert'))).to.equal(expectedOutput('10'));
+        });
+
         it('should export exits that are defined', () => {
             const testRoom = {
                 id: "5",
