@@ -465,12 +465,13 @@ S`;
             expect(actualOutput).to.equal(expectedOutput);
         });
 
-        it.skip('should export clan ownership, if defined', () => {
+        it('should export clan ownership, if defined', () => {
             const testRoom = {
                 id: "3",
                 name: "Room Three",
                 description: "The third room",
-                coordinates: {x: 0, y: 1}
+                coordinates: {x: 0, y: 1},
+                clan: 'Clan Name'
             };
 
             const expectedOutput = `#1003
@@ -478,6 +479,7 @@ Room Three~
 The third room
 ~
 0 0 0
+clan Clan Name~
 S`;
 
             const actualOutput = roomUtils.exportToAreaFormat(1000, testRoom);

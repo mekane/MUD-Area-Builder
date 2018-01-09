@@ -84,12 +84,16 @@ function exportToAreaFormat(startingVnum, room) {
     if (room.healRate)
         healRates = `H ${room.healRate.hp || 100} M ${room.healRate.mana || 100}` + '\n';
 
+    let clan = '';
+    if (room.clan)
+        clan = `clan ${room.clan}~` + '\n';
+
     return `#${roomVnum}
 ${room.name}~
 ${room.description}
 ~
 0 ${sector} 0
-${exits}${extraDescriptions}${healRates}${roomEndSymbol}`;
+${exits}${extraDescriptions}${healRates}${clan}${roomEndSymbol}`;
 }
 
 const hasExit = (room, direction) => {
