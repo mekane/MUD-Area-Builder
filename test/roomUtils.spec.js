@@ -69,6 +69,141 @@ describe('Room utility logic', () => {
         });
     });
 
+    describe('the exportExit', function () {
+        it('should be a function', function () {
+            expect(roomUtils.exportExit).to.be.a('function');
+        });
+
+        it('should return an empty string for bad arguments', function () {
+            expect(roomUtils.exportExit()).to.equal('');
+            expect(roomUtils.exportExit(0)).to.equal('');
+            expect(roomUtils.exportExit('')).to.equal('');
+            expect(roomUtils.exportExit([])).to.equal('');
+            expect(roomUtils.exportExit({})).to.equal('');
+
+            expect(roomUtils.exportExit('n')).to.equal('');
+            expect(roomUtils.exportExit('n', 0)).to.equal('');
+            expect(roomUtils.exportExit('n', '')).to.equal('');
+            expect(roomUtils.exportExit('n', [])).to.equal('');
+            expect(roomUtils.exportExit('n', {})).to.equal('');
+        });
+
+        it('encodes the right direction number for the exit ', () => {
+            const fakeExitData = {destination: 0};
+
+            const northExport = roomUtils.exportExit('n', fakeExitData).slice(0, 2);
+            const eastExport = roomUtils.exportExit('e', fakeExitData).slice(0, 2);
+            const southExport = roomUtils.exportExit('s', fakeExitData).slice(0, 2);
+            const westExport = roomUtils.exportExit('w', fakeExitData).slice(0, 2);
+
+            expect(northExport).to.equal('D0');
+            expect(eastExport).to.equal('D1');
+            expect(southExport).to.equal('D2');
+            expect(westExport).to.equal('D3');
+        });
+
+        it('exports defaults for basic exit data', () => {
+            const exitData = {
+                destination: 4
+            };
+
+            const expectedOutput = `D0
+~
+~
+0 0 4`;
+
+            const actualOutput = roomUtils.exportExit('n', exitData);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it('accepts a vnum function to modify the destination vnum', () => {
+            const exitData = {
+                destination: 4
+            };
+
+            const vnumFunction = x => x + 1;
+
+            const expectedOutput = `D0
+~
+~
+0 0 5`;
+
+            const actualOutput = roomUtils.exportExit('n', exitData, vnumFunction);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it('exports exit description and keywords', () => {
+            const exitData = {
+                destination: 4,
+                description: 'exit description',
+                keywords: 'exit keywords'
+            };
+
+            const expectedOutput = `D0
+exit description~
+exit keywords~
+0 0 4`;
+
+            const actualOutput = roomUtils.exportExit('n', exitData);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it('exports exit closed/locked state and key vnum, if any', () => {
+            const closedDoorExitData = {
+                destination: 4,
+                lock: 'closed'
+            };
+
+            const expectedOutputForClosedDoor = `D0
+~
+~
+1 0 4`;
+
+            const actualOutput = roomUtils.exportExit('n', closedDoorExitData);
+
+            expect(actualOutput).to.equal(expectedOutputForClosedDoor);
+        });
+
+        it('exports exit locked state and key vnum, if any', () => {
+            const lockedDoorExitData = {
+                destination: 4,
+                lock: 'locked',
+                key: 10
+            };
+
+            const expectedOutputForLockedDoor = `D0
+~
+~
+2 10 4`;
+
+            const actualOutput = roomUtils.exportExit('n', lockedDoorExitData);
+
+            expect(actualOutput).to.equal(expectedOutputForLockedDoor);
+        });
+
+        it('applies the vnum function to the key vnum, if any', () => {
+            const exitData = {
+                destination: 4,
+                lock: 'locked',
+                key: 10
+            };
+
+            const vnumFunction = x => x + 10;
+
+            const expectedOutput = `D0
+~
+~
+2 20 14`;
+
+            const actualOutput = roomUtils.exportExit('n', exitData, vnumFunction);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+    });
+
     /**
      * Format for one Room:
      * #<vnum:number>
@@ -120,29 +255,29 @@ describe('Room utility logic', () => {
      DESERT     10         9       will eventually affect thirst and recovery
 
      D is for all exits, not just doors
-        door:number specifies the exit direction
-        0 north
-        1 east
-        2 south
-        3 west
-        4 up
-        5 down
+     door:number specifies the exit direction
+     0 north
+     1 east
+     2 south
+     3 west
+     4 up
+     5 down
 
-        <locks> sets the door initial state and locking capabilities. Defaults to 0
-        0 open
-        1 closed
-        2 closed and locked
+     <locks> sets the door initial state and locking capabilities. Defaults to 0
+     0 open
+     1 closed
+     2 closed and locked
 
-        <key> is the vnum of the Object which is the key used to lock and unlock the door. Defaults to 0 for none
+     <key> is the vnum of the Object which is the key used to lock and unlock the door. Defaults to 0 for none
 
-        <to_room> is the destination vnum of the room that the exit goes to
+     <to_room> is the destination vnum of the room that the exit goes to
 
      E is for adding extra keywords and descriptions to the room for things like signs
 
      M and H are for setting the Mana and Hit Points healing rate, where 100 is the default. Range is 1 to 200, i.e. 1% heal rate to 200% heal rate
 
      clan is for assigning ownership of a room to a clan
-*/
+     */
     describe('the exportToAreaFormat utility', () => {
         it('should export an exportToAreaFormat function', () => {
             expect(roomUtils.exportToAreaFormat).to.be.a('function');
@@ -177,6 +312,37 @@ S`;
 
             expect(actualOutput).to.equal(expectedOutput);
         });
+
+        it('should export exits that are defined', () => {
+            const testRoom = {
+                id: "5",
+                name: "Room Five",
+                description: "The fifth room",
+                coordinates: {x: 0, y: 1},
+                exit: {
+                    n: {
+                        destination: 10
+                    },
+                    e: {
+                        destination: 11
+                    }
+                }
+            };
+
+            const expectedOutput = `#1005
+Room Five~
+The fifth room
+~
+0 0 0
+D0
+~
+~
+0 0 1010
+D1
+~
+~
+0 0 1011
+S`;
 
             const actualOutput = roomUtils.exportToAreaFormat(1000, testRoom);
 
