@@ -24,7 +24,6 @@ See `grunt -h` for available tasks. The important ones are:
    * draw prettier exit and "add" arrow
    * 
    * save state to local storage
-   * export to area file text
    * parse area file and load
    *
    * Fix area edit form - it does not properly undo because the inputs are not controlled
