@@ -12,6 +12,7 @@ class AppComponent extends React.Component {
 
         this.activeRoomChanged = this.activeRoomChanged.bind(this);
         this.exportArea = this.exportArea.bind(this);
+        this.exportState = this.exportState.bind(this);
 
         this.state = {
             activeRoomId: -1
@@ -43,6 +44,11 @@ class AppComponent extends React.Component {
         console.log(exporter.exportArea(areaData));
     }
 
+    exportState() {
+        console.log('Please email this to Marty along with the error:');
+        console.log(JSON.stringify(this.props.state));
+    }
+
     render() {
         const areaInfo = this.props.state.areaInfo;
         const rooms = this.props.state.rooms;
@@ -65,6 +71,7 @@ class AppComponent extends React.Component {
                 <button className="app__undo-button" disabled={!this.props.canUndo} onClick={this.undo}>Undo</button>
                 <button className="app__redo-button" disabled={!this.props.canRedo} onClick={this.redo}>Redo</button>
                 <button className="app__export-button" onClick={this.exportArea}>Export</button>
+                <button className="app__panic-button" onClick={this.exportState}>Panic!</button>
             </div>
         </div>
     }
