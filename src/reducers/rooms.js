@@ -86,6 +86,16 @@ const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
                 lastId: state.lastId
             };
             break;
+        case 'DELETE_ROOM':
+            const roomIdToDelete = action.roomId;
+
+            if ( typeof roomIdToDelete !== 'undefined' && roomIdToDelete in state.byId ) {
+                const newState = Object.assign({}, state);
+                delete newState.byId[action.roomId];
+                return newState;
+            }
+            return state;
+            break;
         default:
             return state;
     }

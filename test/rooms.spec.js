@@ -169,7 +169,7 @@ describe('Room State - the reducer that handles the "rooms" property of the main
     });
 
     describe('updating rooms', () => {
-        it('should return the original state, unmodified, if the room if is missing', () => {
+        it('should return the original state, unmodified, if the room id is missing', () => {
             const originalState = {
                 byId: {
                     1: {id: 1, name: 'test', description: '', exit: {}}
@@ -240,6 +240,32 @@ describe('Room State - the reducer that handles the "rooms" property of the main
             expect(updatedRoom).to.not.equal(originalState.byId['1']);
         });
     });
+
+    describe('deleting rooms', () => {
+        it('should remove the specified room from the list by ID', () => {
+            const initialState = {
+                byId: {
+                    1: {id: 1, name: 'test1', description: '', exit: {}},
+                    2: {id: 2, name: 'test2', description: '', exit: {}}
+                },
+                lastId: 2
+            };
+
+            const deleteRoomAction = actions.deleteRoom(initialState.byId[1]);
+
+            const expectedState = {
+                byId: {
+                    2: {id: 2, name: 'test2', description: '', exit: {}}
+                },
+                lastId: 2
+            };
+
+            const actualState = getNextState(initialState, deleteRoomAction);
+
+            expect(actualState).to.deep.equal(expectedState);
+        });
+    });
+
 
     describe('tracking room IDs', () => {
         it('should keep track of the last ID that was used', () => {

@@ -22,6 +22,7 @@ const appStateReducer = (currentState = defaultState(), action = {type: null}) =
         case 'ADD_ROOM':
         case 'ADD_AND_CONNECT_ROOM':
         case 'SET_ROOM':
+        case 'DELETE_ROOM':
             const newRoomsState = rooms(currentState.rooms, action);
             return Object.assign(defaultState(), currentState, {rooms: newRoomsState});
             break;

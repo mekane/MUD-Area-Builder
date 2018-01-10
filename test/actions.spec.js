@@ -18,6 +18,10 @@ describe('The Action generator functions', () => {
         expect(actions.setRoomInfo).to.be.a('function');
     });
 
+    it('knows how to make a Delete Room action', () => {
+        expect(actions.deleteRoom).to.be.a('function');
+    });
+
     it('knows how to make an Undo action', () => {
         expect(actions.undo).to.be.a('function');
     });

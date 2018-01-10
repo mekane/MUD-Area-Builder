@@ -28,6 +28,13 @@ function setRoomInfo(updatedRoomInfo) {
     }
 }
 
+function deleteRoom(roomInfo = {}) {
+    return {
+        type: 'DELETE_ROOM',
+        roomId: roomInfo.id
+    }
+}
+
 function undo() {
     return {
         type: 'UNDO'
@@ -45,6 +52,7 @@ module.exports = {
     addRoom,
     addAndConnectRoom,
     setRoomInfo,
+    deleteRoom,
     undo,
     redo
 };
