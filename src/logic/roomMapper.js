@@ -1,4 +1,12 @@
-const generateCoordinates = (mapOfRoomsById) => {
+const generateCoordinates = (originalMapOfRoomsById) => {
+    if (typeof(originalMapOfRoomsById) !== 'object') {
+        return {};
+    }
+
+    const mapOfRoomsById = deepCopyMapOfRooms(originalMapOfRoomsById);
+
+    const visited = {};
+
     const visit = (room, currentCoordinates) => {
         if (typeof(room) !== 'object' || visited[room.id]) {
             return;
@@ -33,21 +41,21 @@ const generateCoordinates = (mapOfRoomsById) => {
         }
     };
 
-    if (typeof(mapOfRoomsById) !== 'object') {
-        return {};
-    }
-
-    const visited = {};
-
-    const newRooms = Object.assign({}, mapOfRoomsById);
-    const allRoomIds = Object.keys(newRooms);
+    const allRoomIds = Object.keys(mapOfRoomsById);
     if (allRoomIds.length === 0)
-        return newRooms;
+        return mapOfRoomsById;
 
     visit(mapOfRoomsById[allRoomIds[0]], {x: 0, y: 0});
 
-    return newRooms;
+    return mapOfRoomsById;
 };
+
+function deepCopyMapOfRooms(originalMapOfRoomsById) {
+    const newRooms = Object.assign({}, originalMapOfRoomsById);
+    Object.keys(newRooms).forEach(roomId => newRooms[roomId] = Object.assign({}, originalMapOfRoomsById[roomId]));
+
+    return newRooms;
+}
 
 module.exports = {
     generateCoordinates
