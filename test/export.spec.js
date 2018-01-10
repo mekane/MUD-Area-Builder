@@ -442,13 +442,15 @@ S`;
 
         it('exports area properties in the right format', () => {
             const testArea = {
-                authorName: "Author",
-                fileName: "test.are",
-                name: "Area Name",
-                minLevel: "1",
-                maxLevel: "4",
-                minVnum: "4000",
-                maxVnum: "4099"
+                areaInfo: {
+                    authorName: "Author",
+                    fileName: "test.are",
+                    name: "Area Name",
+                    minLevel: "1",
+                    maxLevel: "4",
+                    minVnum: "4000",
+                    maxVnum: "4099"
+                }
             };
 
             const expectedOutput = `#AREA
@@ -456,6 +458,63 @@ test.are~
 Area Name~
 {1 4} Author Area Name~
 4000 4099
+
+#$
+`;
+            const actualOutput = exportUtils.exportArea(testArea);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+
+        it('exports the #ROOM section if rooms are defined', () => {
+            const testArea = {
+                areaInfo: {
+                    authorName: "Author",
+                    fileName: "file.are",
+                    name: "Test Area",
+                    minLevel: "1",
+                    maxLevel: "4",
+                    minVnum: "1000",
+                    maxVnum: "1099"
+                },
+                rooms: [
+                    {
+                        id: "1",
+                        name: "test1",
+                        description: "test room one",
+                        coordinates: {x: 0, y: 1},
+                        sector: 'city'
+                    },
+                    {
+                        id: "2",
+                        name: "test2",
+                        description: "test room two",
+                        coordinates: {x: 0, y: 1},
+                        sector: 'field'
+                    }
+                ]
+            };
+
+            const expectedOutput = `#AREA
+file.are~
+Test Area~
+{1 4} Author Test Area~
+1000 1099
+
+#ROOMS
+#1001
+test1~
+test room one
+~
+0 1 0
+S
+#1002
+test2~
+test room two
+~
+0 2 0
+S
+
 #$
 `;
             const actualOutput = exportUtils.exportArea(testArea);

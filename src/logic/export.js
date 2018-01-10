@@ -99,12 +99,29 @@ ${room.description}
 ${exits}${extraDescriptions}${healRates}${clan}${roomEndSymbol}`;
 }
 
-function exportArea(areaData) {
-    return `${startAreaSymbol}
-${areaData.fileName}~
+function exportRooms(startingVnum, arrayOfRooms) {
+    const exportFn = (room) => exportRoom(startingVnum, room);
+
+    return `
+#ROOMS
+${arrayOfRooms.map(exportFn).join('\n')}
+`;
+}
+
+function exportAreaHeader(areaData) {
+    return `${areaData.fileName}~
 ${areaData.name}~
 {${areaData.minLevel} ${areaData.maxLevel}} ${areaData.authorName} ${areaData.name}~
-${areaData.minVnum} ${areaData.maxVnum}
+${areaData.minVnum} ${areaData.maxVnum}`;
+}
+
+function exportArea(data) {
+    const startingVnum = data.areaInfo.minVnum;
+    const rooms = Array.isArray(data.rooms) ? exportRooms(startingVnum, data.rooms) : '';
+
+    return `${startAreaSymbol}
+${exportAreaHeader(data.areaInfo)}
+${rooms}
 ${endAreaSymbol}
 `;
 }
