@@ -16,15 +16,19 @@ See `grunt -h` for available tasks. The important ones are:
 
 ## TODO List
 
-   * auto-show edit room for new room when clicking hover arrow
-   * detect adjacent rooms when adding new rooms and auto-connect them to keep a normal structure
-   * Mapper - deal with rooms that are not connected (either ignore them when drawing or give them reasonable default coordinates)
+   * Delete room action
+   * Room sectors
+
    * size the room-map to fit all the rooms, make its container scroll: auto
+   * Fix area edit form - it does not properly undo because the inputs are not controlled
+   * Make the room list clickable to set the active room
+
    * translate the whole room-map so negative indices are positive
+   * Mapper - deal with rooms that are not connected (either ignore them when drawing or give them reasonable default coordinates)
+   * auto-edit the new room when clicking green box
+   * detect adjacent rooms when adding new rooms and auto-connect them to keep a normal structure
    * draw prettier exit and "add" arrow
    * 
    * save state to local storage
    * parse area file and load
    *
-   * Fix area edit form - it does not properly undo because the inputs are not controlled
-   * It would be nice to make the new room active and being edited when clicking a green square to add one
