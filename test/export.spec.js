@@ -8,7 +8,7 @@ describe('Export to area file utility logic', () => {
         expect(exportUtils).to.be.an('object');
     });
 
-    describe('exportExit', function () {
+    describe('the exportExit function', function () {
         it('should be a function', function () {
             expect(exportUtils.exportExit).to.be.a('function');
         });
@@ -217,7 +217,7 @@ exit keywords~
 
      clan is for assigning ownership of a room to a clan
      */
-    describe('the exportRoom utility', () => {
+    describe('the exportRoom function', () => {
         it('should export an exportRoom function', () => {
             expect(exportUtils.exportRoom).to.be.a('function');
         });
@@ -427,4 +427,40 @@ S`;
         });
     });
 
+    /**
+     * Format for the Area file
+     * #AREA
+     * filename.are~
+     * Area Name~
+     * {1 50} Builder Sample Area~
+     * ZX00 ZX99
+     */
+    describe('the exportArea function', function () {
+        it('should be a function', function () {
+            expect(exportUtils.exportArea).to.be.a('function');
+        });
+
+        it('exports area properties in the right format', () => {
+            const testArea = {
+                authorName: "Author",
+                fileName: "test.are",
+                name: "Area Name",
+                minLevel: "1",
+                maxLevel: "4",
+                minVnum: "4000",
+                maxVnum: "4099"
+            };
+
+            const expectedOutput = `#AREA
+test.are~
+Area Name~
+{1 4} Author Area Name~
+4000 4099
+#$
+`;
+            const actualOutput = exportUtils.exportArea(testArea);
+
+            expect(actualOutput).to.equal(expectedOutput);
+        });
+    });
 });

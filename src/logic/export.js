@@ -1,5 +1,8 @@
 const vnums = require('./vnums.js');
 
+const startAreaSymbol = '#AREA';
+const endAreaSymbol = '#$';
+
 const exitDirectionToNumberCode = {
     n: '0',
     e: '1',
@@ -96,7 +99,18 @@ ${room.description}
 ${exits}${extraDescriptions}${healRates}${clan}${roomEndSymbol}`;
 }
 
+function exportArea(areaData) {
+    return `${startAreaSymbol}
+${areaData.fileName}~
+${areaData.name}~
+{${areaData.minLevel} ${areaData.maxLevel}} ${areaData.authorName} ${areaData.name}~
+${areaData.minVnum} ${areaData.maxVnum}
+${endAreaSymbol}
+`;
+}
+
 module.exports = {
+    exportArea,
     exportExit,
     exportRoom
 };
