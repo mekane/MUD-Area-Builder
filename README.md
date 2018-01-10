@@ -21,7 +21,6 @@ See `grunt -h` for available tasks. The important ones are:
 
    * size the room-map to fit all the rooms, make its container scroll: auto
    * Fix area edit form - it does not properly undo because the inputs are not controlled
-   * Make the room list clickable to set the active room
 
    * translate the whole room-map so negative indices are positive
    * Mapper - deal with rooms that are not connected (either ignore them when drawing or give them reasonable default coordinates)
