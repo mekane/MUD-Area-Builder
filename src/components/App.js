@@ -4,11 +4,14 @@ const RoomList = require('./rooms/RoomList.js');
 const RoomMap = require('./rooms/RoomMap.js');
 const RoomForm = require('./forms/RoomForm.js');
 
+const exporter = require('../logic/export.js');
+
 class AppComponent extends React.Component {
     constructor(props) {
         super(props);
 
         this.activeRoomChanged = this.activeRoomChanged.bind(this);
+        this.exportArea = this.exportArea.bind(this);
 
         this.state = {
             activeRoomId: -1
@@ -27,6 +30,17 @@ class AppComponent extends React.Component {
 
     redo() {
         app.store.dispatch(app.actions.redo());
+    }
+
+    exportArea() {
+        const roomsById = this.props.state.rooms.byId;
+        const rooms = Object.keys(roomsById).map(roomId => roomsById[roomId]);
+
+        const areaData = {
+            areaInfo: this.props.state.areaInfo,
+            rooms
+        };
+        console.log(exporter.exportArea(areaData));
     }
 
     render() {
@@ -50,6 +64,7 @@ class AppComponent extends React.Component {
             <div className="app__controls">
                 <button className="app__undo-button" disabled={!this.props.canUndo} onClick={this.undo}>Undo</button>
                 <button className="app__redo-button" disabled={!this.props.canRedo} onClick={this.redo}>Redo</button>
+                <button className="app__export-button" onClick={this.exportArea}>Export</button>
             </div>
         </div>
     }
