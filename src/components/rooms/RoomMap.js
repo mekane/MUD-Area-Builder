@@ -14,6 +14,13 @@ function addRoom(action) {
     app.store.dispatch(action);
 }
 
+function findMinimumCoordinates(minimumCoordinates, nextRoom) {
+    return {
+        x: nextRoom.coordinates.x < minimumCoordinates.x ? nextRoom.coordinates.x : minimumCoordinates.x,
+        y: nextRoom.coordinates.y < minimumCoordinates.y ? nextRoom.coordinates.y : minimumCoordinates.y
+    };
+}
+
 const Exit = (room, direction) => {
     const exit = room.exit[direction];
     if (exit && exit.destination) {
@@ -30,15 +37,18 @@ const RoomMapComponent = ({areaInfo, roomsData, setActiveRoom}) => {
     const vnum = vnumLogic.generator(areaInfo.minVnum);
 
     const Room = (room) => {
-        const x = cssValueForCoordinate(room.coordinates.x);
-        const y = cssValueForCoordinate(room.coordinates.y);
+        const xValue = room.coordinates.x + coordinateAdjustment.x;
+        const yValue = room.coordinates.y + coordinateAdjustment.y;
+
+        const x = cssValueForCoordinate(xValue);
+        const y = cssValueForCoordinate(yValue);
 
         const style = {
             transform: `translate(${x}px, ${y}px)`
         };
 
         function clickHandler(roomId) {
-            return function(e) {
+            return function (e) {
                 setActiveRoom(roomId);
             };
         }
@@ -57,6 +67,11 @@ const RoomMapComponent = ({areaInfo, roomsData, setActiveRoom}) => {
     const roomsMapped = mapper.generateCoordinates(roomsData.byId);
 
     const allRooms = Object.keys(roomsMapped).map(roomId => roomsMapped[roomId]);
+    const minimumCoordinates = allRooms.reduce(findMinimumCoordinates, {x: 0, y: 0});
+    const coordinateAdjustment = {
+        x: Math.abs(minimumCoordinates.x),
+        y: Math.abs(minimumCoordinates.y)
+    };
 
     return (
         <div className="room-map">
