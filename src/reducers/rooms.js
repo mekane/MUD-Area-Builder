@@ -1,3 +1,5 @@
+const freeze = require('deep-freeze');
+
 const defaultState = () => ({
     byId: {},
     lastId: 0
@@ -9,11 +11,13 @@ const defaultRoom = () => ({
     exit: {}
 });
 
+const deepCopy = (object) => JSON.parse(JSON.stringify(object));
+
 function addExit(room, direction, destination) {
     if (!room || !direction)
         return room;
 
-    const updatedRoom = Object.assign({}, {exit: {}}, room);
+    const updatedRoom = deepCopy(room);
 
     updatedRoom.exit[direction] = {
         destination
@@ -36,6 +40,8 @@ function oppositeDirection(direction) {
 const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
     let newRoomId = 0;
     let newRoom = {};
+
+    freeze(state);
 
     switch (action.type) {
         case 'ADD_ROOM':
@@ -90,7 +96,7 @@ const roomsStateReducer = (state = defaultState(), action = {type: null}) => {
             const roomIdToDelete = action.roomId;
 
             if ( typeof roomIdToDelete !== 'undefined' && roomIdToDelete in state.byId ) {
-                const newState = Object.assign({}, state);
+                const newState = deepCopy(state);
                 delete newState.byId[action.roomId];
                 return newState;
             }

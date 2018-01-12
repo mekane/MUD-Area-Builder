@@ -53,6 +53,18 @@ class RoomForm extends React.Component {
         }
     }
 
+    deleteRoom(that) {
+        return function (e) {
+            let room = that.state.room;
+
+            if (room.id) {
+                app.store.dispatch(app.actions.deleteRoom(room));
+            }
+            else
+                that.cancel(e);
+        }
+    }
+
     cancel(event) {
         this.props.setActiveRoom(null);
     }
@@ -82,8 +94,6 @@ class RoomForm extends React.Component {
         const target = event.target;
         const destination = target.value;
         const direction = target.name;
-
-        const exit = this.state.room.exit[direction];
 
         const newExits = Object.assign({}, this.state.room.exit, {[direction]: {destination}});
         const newRoomState = Object.assign({}, this.state.room, {exit: newExits});
@@ -155,6 +165,7 @@ class RoomForm extends React.Component {
 
             <div className="room-form__controls">
                 <button type="button" className="room-form__update" onClick={this.updateInfo(this)}>Update</button>
+                <button type="button" className="room-form__delete" onClick={this.deleteRoom(this)}>Delete</button>
                 <button type="button" className="room-form__cancel" onClick={this.cancel}>Cancel</button>
             </div>
         </form>

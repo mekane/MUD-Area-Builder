@@ -1,5 +1,7 @@
 'use strict';
 
+const freeze = require('deep-freeze');
+
 const getNextAppState = require('./appState.js');
 
 const defaultState = () => {
@@ -11,12 +13,14 @@ const defaultState = () => {
 };
 
 const appHistoryReducer = (currentState = defaultState(), action = {type: null}) => {
-    if ( typeof action === 'undefined' || !action || action.type == null ) {
+    if (typeof action === 'undefined' || !action || action.type == null || action.type.substr(0, 7) == '@@redux') {
         return currentState;
     }
 
-    if ( action.type === 'UNDO' ) {
-        if ( currentState.past.length < 1 )
+    freeze(currentState);
+
+    if (action.type === 'UNDO') {
+        if (currentState.past.length < 1)
             return currentState;
 
         const newPast = currentState.past.slice();
@@ -30,8 +34,8 @@ const appHistoryReducer = (currentState = defaultState(), action = {type: null})
         };
     }
 
-    if ( action.type === 'REDO' ) {
-        if ( currentState.future.length < 1 )
+    if (action.type === 'REDO') {
+        if (currentState.future.length < 1)
             return currentState;
 
         const newPast = currentState.past.slice().concat(currentState.present);

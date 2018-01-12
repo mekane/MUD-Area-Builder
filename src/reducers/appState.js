@@ -2,6 +2,8 @@
 const areaInfo = require('./areaInfo.js');
 const rooms = require('./rooms.js');
 
+const freeze = require('deep-freeze');
+
 const defaultState = () => {
     return {
         areaInfo: {},
@@ -13,6 +15,8 @@ const defaultState = () => {
 };
 
 const appStateReducer = (currentState = defaultState(), action = {type: null}) => {
+
+    freeze(currentState);
 
     switch (action.type) {
         case 'SET_AREA_INFO':
