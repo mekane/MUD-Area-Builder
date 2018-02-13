@@ -16,8 +16,7 @@ See `grunt -h` for available tasks. The important ones are:
 
 ## TODO List
 
-   * Delete room action
-   * Room sectors
+   * Room sectors - display them differently on the map
 
    * size the room-map to fit all the rooms, make its container scroll: auto
    * Fix area edit form - it does not properly undo because the inputs are not controlled

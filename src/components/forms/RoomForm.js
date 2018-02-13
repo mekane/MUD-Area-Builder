@@ -22,7 +22,7 @@ class RoomForm extends React.Component {
                 s: roomLogic.hasExit(room, 's'),
                 w: roomLogic.hasExit(room, 'w')
             },
-            room: Object.assign({}, room)
+            room: Object.assign({sector: 0}, room)
         };
     }
 
@@ -120,6 +120,23 @@ class RoomForm extends React.Component {
                 Description:
                 <input className="room-form__room-description"
                        type="text" value={this.state.room.description} name="description" onChange={this.handleRoomInputChange}/>
+            </label>
+
+            <label className="room-form__label">
+                Sector:
+                <select className="room-form__room-sector"
+                        value={this.state.room.sector} name="sector" onChange={this.handleRoomInputChange}>
+                    <option value="0">Inside</option>
+                    <option value="1">City</option>
+                    <option value="2">Field</option>
+                    <option value="3">Forest</option>
+                    <option value="4">Hills</option>
+                    <option value="5">Mountain</option>
+                    <option value="6">Water</option>
+                    <option value="7">Deep Water</option>
+                    <option value="9">Air</option>
+                    <option value="10">Desert</option>
+                </select>
             </label>
 
             <header>Exits</header>
