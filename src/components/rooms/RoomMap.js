@@ -14,6 +14,24 @@ function addRoom(action) {
     app.store.dispatch(action);
 }
 
+//TODO: put in its own node module file, require here and in RoomForm
+const sectors = {
+    0: 'Inside',
+    1: 'City',
+    2: 'Field',
+    3: 'Forest',
+    4: 'Hills',
+    5: 'Mountain',
+    6: 'Water',
+    7: 'Deep',
+    9: 'Air',
+    10: 'Desert'
+};
+
+function nameOfSector(sectorNumber) {
+    return sectorNumber in sectors ? sectors[sectorNumber] : sectors[0];
+}
+
 function findMinimumCoordinates(minimumCoordinates, nextRoom) {
     return {
         x: nextRoom.coordinates.x < minimumCoordinates.x ? nextRoom.coordinates.x : minimumCoordinates.x,
@@ -53,8 +71,10 @@ const RoomMapComponent = ({areaInfo, roomsData, setActiveRoom}) => {
             };
         }
 
+        const roomClass = `room-map__room room-map__room--${nameOfSector(room.sector)}`;
+
         return (
-            <div key={room.id} className="room-map__room" style={style} onClick={clickHandler(room.id)}>
+            <div key={room.id} className={roomClass} style={style} onClick={clickHandler(room.id)}>
                 <div className="room-map__room-name">#{ vnum(room.id) } { room.name }</div>
                 <div className="room-map__room-coordinates">{ room.coordinates.x }, { room.coordinates.y }</div>
                 <div className="room-map__room-exit">
